@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Telstra.Twins.Common.TwinsConnection">
+    <Position X="1.5" Y="2" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Telstra.Twins.Common.TwinsConnection.TwinsConnectionSubscription">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\TwinsConnection.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAIAAYAIQBAAACAAIAAAAACAACAAEAAAEDgAAA=</HashCode>
+      <FileName>Common\TwinsConnection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="EventsProcessorClient" />
+      <Property Name="TwinsClient" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Telstra.Twins.TwinBase">
+    <Position X="10" Y="2" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAgAABAQAUAAABJAgAAAAAABAAQAAAABEAAQ=</HashCode>
+      <FileName>TwinBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Azure.Messaging.EventHubs.EventProcessorClient" Collapsed="true">
+    <Position X="6.75" Y="6" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Telstra.Twins.TwinBase&lt;TEvent&gt;">
+    <Position X="10" Y="7.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAACAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TwinBase.Observer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Telstra.Twins.ITwinsClient" Collapsed="true">
+    <Position X="6.75" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAIAAgAgAgBAAAAABAAAKAAIAAAogAAAI=</HashCode>
+      <FileName>ITwinsClient.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
