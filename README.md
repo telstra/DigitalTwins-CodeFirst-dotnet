@@ -7,21 +7,6 @@ Telstra has developed a “code-first” approach which sees it leverage common 
 
 To date this has drastically reduced the time it takes for developers to create, read, write, and deploy digital twins, as well as, reducing the ongoing maintenance required. 
 
-# Getting Started
-Ensure that your system has .NET core 3.1
-
-# Setup
-## Environment Setup
-- Create ADT instance
-- Create IoT Hub instance 
-- Integrate IoT Hub instance with ADT instance
-## Configuring Unit Tests
-Ensure that the following environment variables are set. Optionally, they can also be in the configuration.
-- TENANT_ID
-- CLIENT_ID
-- CLIENT_SECRET
-- SERVICE_HOSTNAME
-
 # Build and Test
 The project is meant to be used as a library so all testing has do be done through unit testing with the xUnit framework.
 
