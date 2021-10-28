@@ -23,11 +23,24 @@ Ensure that the following environment variables are set. Optionally, they can al
 - SERVICE_HOSTNAME
 
 # Build and Test
-At the moment, the code doesn't include user interface so after building the solution the unit tests will need to be used to explore the functionality.
-All unit tests must be present under the test/unittest folder. Test codes can be run individually if using the Visual Studio IDE otherwise some other extension or tools will be required such as .NET Core Test Explorer for VS Code. 
+The project is meant to be used as a library so all testing has do be done through unit testing with the xUnit framework.
 
 # Contribution Guidelines
+Telstra appreciates any contributions to the project.
 
+## Issues
+Feel free to submit feature requests and bugs as issues. 
+
+## Contributing
+The project follows a Feature Branch Workflow. So for each feature or bug a new branch must be created and all changes must be done on that branch. All commits must have a verified signature. 
+
+1. Clone the project on your local machine
+2. Create a new feature/bug branch from master
+3. Push the changes
+4. Submit a pull request
+
+## Testing
+Ensure that all new features added are tested and have unit tests for the same in the xUnit framework.
 # References
 This project is based on the Microsoft SDK recommendations outlined at 
 https://azure.github.io/azure-sdk/dotnet_introduction.html.
