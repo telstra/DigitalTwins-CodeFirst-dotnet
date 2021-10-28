@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Dynamic;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 
@@ -13,7 +14,7 @@ namespace Telstra.Twins.Models
             var property = new ModelProperty
             {
                 Name = info.Name.ToCamelCase(),
-                Schema = SchemaFromType(info.PropertyType)
+                Schema = SchemaFromType(info)
             };
 
             if (Attribute.IsDefined(info, typeof(TwinTelemetryAttribute)))
@@ -42,11 +43,72 @@ namespace Telstra.Twins.Models
             {typeof(Int64), "integer" }
         };
 
-        internal static string SchemaFromType(Type propertyType)
+        internal static object SchemaFromType(PropertyInfo info)
         {
-            if (propertyType.IsGenericType)
-                propertyType = propertyType.GetGenericArguments()[0];
-            return SchemaMap.ContainsKey(propertyType) ? SchemaMap[propertyType] : null;
+            var propertyType = info.PropertyType;
+            if (SchemaMap.ContainsKey(propertyType))  
+                return SchemaMap[propertyType];
+            else if (propertyType.IsClass)
+            {
+                var schema = new Dictionary<string, object>();
+                schema.Add("@type", "Object");
+                var fields = new List<NestedField>();
+                var fieldsInfo = propertyType.GetFields();
+                foreach(var fieldInfo in fieldsInfo)
+                {
+                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.FieldType)));
+                }
+                schema.Add("fields", fields);
+                return schema;
+            }
+            else if (propertyType.IsArray)
+            {
+                var schema = new Dictionary<string, string>();
+                schema.Add("@type", "Array");
+                var arrayType = SchemaMap.TryGetValue<Type, string>(propertyType);
+                schema.Add("elementSchema", arrayType);
+                return schema;
+            }
+            else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                var schema = new Dictionary<string, string>();
+                schema.Add("@type", "Array");
+                var listType = SchemaMap.TryGetValue<Type, string>(propertyType);
+                schema.Add("elementSchema", listType);
+                return schema;
+            }
+            else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                var schema = new Dictionary<string, Object>();
+                schema.Add("@type", "Map");
+                //TODO Logic to fill up the name field which is metadata
+                var mapKey = new NestedField("name", "string");
+                schema.Add("mapKey", mapKey);
+                var mapValue = new NestedField("name", SchemaMap.TryGetValue<Type, string>(propertyType.GetGenericArguments()[1]));
+                schema.Add("mapValue", mapValue);
+                return schema;
+            }
+            else return null;
+        }
+
+        internal class NestedField
+        {
+            public NestedField (string name, string schema)
+            {
+                this.name = name;
+                this.schema = schema;
+            }
+            public string name { get; set; }
+            public string schema { get; set; }
+        }
+
+    }
+
+    internal static class Extensions
+    {
+        public static T TryGetValue<K,T>(this Dictionary<K,T> dict, K key)
+        {
+            return dict.ContainsKey(key) ? dict[key] : default(T);
         }
     }
 }

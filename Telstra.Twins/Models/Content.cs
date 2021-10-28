@@ -15,6 +15,6 @@ namespace Telstra.Twins.Models
 
         [JsonProperty("schema", Order = -1)]
         [JsonPropertyName("schema")]
-        public string Schema { get; set; }
+        public object Schema { get; set; }
     }
 }
