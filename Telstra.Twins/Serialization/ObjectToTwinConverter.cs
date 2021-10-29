@@ -109,7 +109,7 @@ namespace Telstra.Twins.Serialization
                 else
                 {
                     // Create the custom converter
-                    var twinComponentConverterType = typeof(ObjectToTwinComponentConverter<>);
+                    var twinComponentConverterType = typeof(ObjectToTwinConverter<>);
                     var concreteTwinComponentConverterType =
                         twinComponentConverterType.MakeGenericType(propertyValue.GetType());
                     var componentConverter = Activator.CreateInstance(concreteTwinComponentConverterType) as JsonConverter;
