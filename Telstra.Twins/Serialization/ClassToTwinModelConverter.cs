@@ -84,7 +84,7 @@ namespace Telstra.Twins.Serialization
                 writer.WriteStartArray("contents");
                 contents.ForEach(contentItem =>
                 {
-                    JsonSerializer.Serialize(writer, contentItem, options);
+                    JsonSerializer.Serialize<object>(writer, contentItem, options);
                 });
 
                 writer.WriteEndArray();

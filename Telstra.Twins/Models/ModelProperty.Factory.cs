@@ -48,19 +48,6 @@ namespace Telstra.Twins.Models
             var propertyType = info.PropertyType;
             if (SchemaMap.ContainsKey(propertyType))  
                 return SchemaMap[propertyType];
-            else if (propertyType.IsClass)
-            {
-                var schema = new Dictionary<string, object>();
-                schema.Add("@type", "Object");
-                var fields = new List<NestedField>();
-                var fieldsInfo = propertyType.GetFields();
-                foreach(var fieldInfo in fieldsInfo)
-                {
-                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.FieldType)));
-                }
-                schema.Add("fields", fields);
-                return schema;
-            }
             else if (propertyType.IsArray)
             {
                 var schema = new Dictionary<string, string>();
@@ -73,7 +60,7 @@ namespace Telstra.Twins.Models
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var listType = SchemaMap.TryGetValue<Type, string>(propertyType);
+                var listType = SchemaMap.TryGetValue<Type, string>(propertyType.GetGenericArguments()[0]);
                 schema.Add("elementSchema", listType);
                 return schema;
             }
@@ -86,6 +73,19 @@ namespace Telstra.Twins.Models
                 schema.Add("mapKey", mapKey);
                 var mapValue = new NestedField("name", SchemaMap.TryGetValue<Type, string>(propertyType.GetGenericArguments()[1]));
                 schema.Add("mapValue", mapValue);
+                return schema;
+            }
+            else if (propertyType.IsClass)
+            {
+                var schema = new Dictionary<string, object>();
+                schema.Add("@type", "Object");
+                var fields = new List<NestedField>();
+                var fieldsInfo = propertyType.GetFields();
+                foreach(var fieldInfo in fieldsInfo)
+                {
+                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.FieldType)));
+                }
+                schema.Add("fields", fields);
                 return schema;
             }
             else return null;

@@ -1,4 +1,6 @@
-﻿namespace Telstra.Twins.Models
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json
+namespace Telstra.Twins.Models
 {
     public partial class ModelRelationship : Content
     {
@@ -7,8 +9,11 @@
         public string Comment { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
-        public int MaxMultiplicity { get; set; }
-        public int MinMultiplicity { get; set; }
+        public int? MaxMultiplicity { get; set; }
+        public int? MinMultiplicity { get; set; }
+
+        [JsonProperty("target")]
+        [JsonPropertyName("target")]
         public string Target { get; set; }
         public bool? Writable { get; set; }
 
@@ -17,8 +22,8 @@
             string id = null,
             string comment = null,
             string description = null,
-            int maxMultiplicity = default,
-            int minMultiplicity = default,
+            int? maxMultiplicity = null,
+            int? minMultiplicity = null,
             string target = null,
             bool? writable = null)
         {
