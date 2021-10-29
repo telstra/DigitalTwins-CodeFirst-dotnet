@@ -9,7 +9,13 @@ namespace Telstra.Twins.Models
         public string Comment { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
+
+        [JsonPropertyName("maxMultiplicity")]
+        [JsonProperty("maxMultiplicity")]
         public int? MaxMultiplicity { get; set; }
+
+        [JsonPropertyName("minMultiplicity")]
+        [JsonProperty("minMultiplicity")]
         public int? MinMultiplicity { get; set; }
 
         [JsonProperty("target")]
