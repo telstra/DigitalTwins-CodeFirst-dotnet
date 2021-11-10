@@ -174,3 +174,5 @@
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
+
+   Copyright 2021 Telstra Corporation Limited (ABN 33 051 775 556)
