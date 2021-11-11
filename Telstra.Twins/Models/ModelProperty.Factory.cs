@@ -80,10 +80,10 @@ namespace Telstra.Twins.Models
                 var schema = new Dictionary<string, object>();
                 schema.Add("@type", "Object");
                 var fields = new List<NestedField>();
-                var fieldsInfo = propertyType.GetFields();
+                var fieldsInfo = propertyType.GetProperties();
                 foreach(var fieldInfo in fieldsInfo)
                 {
-                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.FieldType)));
+                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.PropertyType)));
                 }
                 schema.Add("fields", fields);
                 return schema;
