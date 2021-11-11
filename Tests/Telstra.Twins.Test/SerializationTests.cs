@@ -29,10 +29,19 @@ namespace Telstra.Twins.Test
 
         [Theory]
         [MemberData(nameof(ModelTestData))]
-        public void ShouldSerialiseModelToDTDL(string model, Type twinType)
+        public void ShouldSerialiseModelToDTDL(string expectedModel, Type twinType)
         {
-            var expectedModel = Serializer.SerializeModel(twinType);
-            JsonAssert.Equals(model, expectedModel);
+            var model = Serializer.SerializeModel(twinType);
+            JsonAssert.Equal(expectedModel, model);
+
+        }
+
+        [Theory]
+        [MemberData(nameof(TwinTestData))]
+        public void ShouldSerialiseTwinToDTDL(string twinDTDL, object twinObject)
+        {
+            var expectedDTDL = Serializer.SerializeTwin(twinObject);
+            JsonAssert.Equal(twinDTDL, expectedDTDL);
         }
 
         public static IEnumerable<object[]> ModelTestData()
@@ -50,8 +59,28 @@ namespace Telstra.Twins.Test
                 DataGenerator.twinWithNestedObject.GetType()
             };
             yield return new object[] {
-                DataGenerator.TwinWithNestedObjectModel,
-                DataGenerator.twinWithNestedObject.GetType()
+                DataGenerator.TwinWithRelationshipModel,
+                DataGenerator.twinWithRelationship.GetType()
+            };
+        }
+
+        public static IEnumerable<object[]> TwinTestData()
+        {
+            yield return new object[] {
+                DataGenerator.SimpleTwinDTDL,
+                DataGenerator.simpleTwin
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithAllAttributesDTDL,
+                DataGenerator.twinWithAllAttributes
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithNestedObjectDTDL,
+                DataGenerator.twinWithNestedObject
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithRelationshipDTDL,
+                DataGenerator.twinWithRelationship
             };
         }
 
