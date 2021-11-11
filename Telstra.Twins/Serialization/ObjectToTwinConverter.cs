@@ -290,6 +290,7 @@ namespace Telstra.Twins.Serialization
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
                 prop => prop.GetTwinPropertyName());
 
+            properties = GetTwinProperties<TwinTelemetryAttribute>(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Concat(properties);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (twinOnlyPropertyNamesToExclude != null)
             {
