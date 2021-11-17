@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FactoryExample.Schema;
 using Telstra.Twins.Attributes;
 
 namespace FactoryExample.Models
@@ -14,6 +16,10 @@ namespace FactoryExample.Models
 
         [TwinRelationship(DisplayName = "Has Floors")]
         public List<FactoryFloor> Floors { get; set; } = new();
+
+        [TwinProperty] public GeoCord? GeoLocation { get; set; }
+
+        [TwinProperty] public DateTimeOffset LastSupplyDate { get; set; }
 
         [TwinProperty] public string? ZipCode { get; set; }
     }

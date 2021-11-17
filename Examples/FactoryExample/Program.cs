@@ -1,9 +1,10 @@
 ﻿using System;
 using FactoryExample.Models;
+using FactoryExample.Schema;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 
-Console.WriteLine("Digital Twin Code First Factory Example");
+Console.WriteLine("Simple Digital Twin Serializer Example");
 
 var modelLibrary = new ModelLibrary();
 var serializer = new DigitalTwinSerializer(modelLibrary);
@@ -24,7 +25,12 @@ Console.WriteLine();
 
 var factory = new Factory
 {
-    FactoryId = "factory1", Country = "AU", ZipCode = "4000", FactoryName = "Chocolate Factory"
+    FactoryId = "factory1",
+    Country = "AU",
+    ZipCode = "4000",
+    FactoryName = "Chocolate Factory",
+    GeoLocation = new GeoCord() { Latitude = -27.4705, Longitude = 153.026 },
+    LastSupplyDate = new DateTimeOffset(2021, 11, 17, 18, 37, 0, TimeSpan.FromHours(10))
 };
 factory.Floors.Add(new FactoryFloor { FloorId = "floor1", FloorName = "Floor 1" });
 
