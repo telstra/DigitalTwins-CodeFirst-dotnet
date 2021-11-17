@@ -65,7 +65,7 @@ namespace Telstra.Twins.Models
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var arrayType = SchemaMap.TryGetValue(propertyType);
+                var arrayType = SchemaMap.GetValueOrDefault(propertyType);
                 schema.Add("elementSchema", arrayType);
                 return schema;
             }
@@ -74,7 +74,7 @@ namespace Telstra.Twins.Models
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var listType = SchemaMap.TryGetValue(propertyType.GetGenericArguments()[0]);
+                var listType = SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[0]);
                 schema.Add("elementSchema", listType);
                 return schema;
             }
@@ -88,7 +88,7 @@ namespace Telstra.Twins.Models
                 var mapKey = new NestedField("name", "string");
                 schema.Add("mapKey", mapKey);
                 var mapValue = new NestedField("name",
-                    SchemaMap.TryGetValue(propertyType.GetGenericArguments()[1]));
+                    SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[1]));
                 schema.Add("mapValue", mapValue);
                 return schema;
             }
@@ -102,7 +102,7 @@ namespace Telstra.Twins.Models
                 foreach (var fieldInfo in fieldsInfo)
                 {
                     fields.Add(new NestedField(fieldInfo.Name,
-                        SchemaMap.TryGetValue(fieldInfo.PropertyType)));
+                        SchemaMap.GetValueOrDefault(fieldInfo.PropertyType)));
                 }
 
                 schema.Add("fields", fields);
@@ -127,9 +127,10 @@ namespace Telstra.Twins.Models
 
     internal static class Extensions
     {
-        public static T TryGetValue<K, T>(this Dictionary<K, T> dict, K key)
+        public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
+            TKey key)
         {
-            return dict.ContainsKey(key) ? dict[key] : default;
+            return dictionary.TryGetValue(key, out TValue value) ? value : default;
         }
     }
 }
