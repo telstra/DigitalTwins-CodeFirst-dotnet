@@ -15,7 +15,7 @@ namespace FactoryExample.Models
         [TwinProperty] public string? FactoryName { get; set; }
 
         [TwinRelationship(DisplayName = "Has Floors")]
-        public List<FactoryFloor> Floors { get; set; } = new();
+        public IList<FactoryFloor> Floors { get; } = new List<FactoryFloor>();
 
         [TwinProperty] public GeoCord? GeoLocation { get; set; }
 
