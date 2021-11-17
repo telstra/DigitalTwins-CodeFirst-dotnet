@@ -62,6 +62,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithRelationshipModel,
                 DataGenerator.twinWithRelationship.GetType()
             };
+            yield return new object[] {
+                DataGenerator.TwinWithDateTimeModel,
+                DataGenerator.twinWithDateTime.GetType()
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()
@@ -81,6 +85,10 @@ namespace Telstra.Twins.Test
             yield return new object[] {
                 DataGenerator.TwinWithRelationshipDTDL,
                 DataGenerator.twinWithRelationship
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithDateTimeDTDL,
+                DataGenerator.twinWithDateTime
             };
         }
 
