@@ -66,6 +66,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithDateTimeModel,
                 DataGenerator.twinWithDateTime.GetType()
             };
+            yield return new object[] {
+                DataGenerator.TwinWithNullableDateTimeModel,
+                typeof(TwinWithNullableDateTime)
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()

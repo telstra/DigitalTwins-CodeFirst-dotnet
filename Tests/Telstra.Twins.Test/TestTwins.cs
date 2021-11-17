@@ -82,6 +82,13 @@ namespace Telstra.Twins.Test
         public DateTimeOffset Manufactured { get; set; }
     }
 
+    [DigitalTwin(Version=1,DisplayName="Twin with nullable dateTime")]
+    public class TwinWithNullableDateTime: TwinBase
+    {
+        [TwinProperty]
+        public DateTimeOffset? Manufactured { get; set; }
+    }
+
     public static class DataGenerator
     {
         public static TwinWithNestedObject twinWithNestedObject = new TwinWithNestedObject()
@@ -142,5 +149,6 @@ namespace Telstra.Twins.Test
         public static string TwinWithAllAttributesModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithallattributes;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with all attributes\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"property\",\r\n      \"schema\": \"string\"\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"intArray\",\r\n      \"schema\": {\r\n        \"@type\": \"Array\",\r\n        \"elementSchema\": \"integer\"\r\n      }\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"stringMap\",\r\n      \"schema\": {\r\n        \"@type\": \"Map\",\r\n        \"mapKey\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        },\r\n        \"mapValue\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 1,\r\n      \"minMultiplicity\": 2,\r\n      \"target\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"twinRelationship\"\r\n    },\r\n    {\r\n      \"@type\": \"Component\",\r\n      \"name\": \"simpleTwin\",\r\n      \"schema\": \"dtmi:telstra:twins:test:simpletwin;1\"\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"flag\",\r\n      \"schema\": \"boolean\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithDateTimeDTDL = "{\r\n  \"$dtId\": \"1234\",\r\n  \"$etag\": \"5678\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithdatetime;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"manufactured\": \"2021-11-17T22:23:00+10:00\"\r\n}";
         public static string TwinWithDateTimeModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithdatetime;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with dateTime\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"manufactured\",\r\n      \"schema\": \"dateTime\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithNullableDateTimeModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithnullabledatetime;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with nullable dateTime\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"manufactured\",\r\n      \"schema\": \"dateTime\"\r\n    }\r\n  ]\r\n}";
     }
 }
