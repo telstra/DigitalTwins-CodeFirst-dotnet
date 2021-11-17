@@ -13,9 +13,20 @@ namespace Telstra.Twins.Models
         {
             var property = new ModelProperty
             {
-                Name = info.Name.ToCamelCase(),
-                Schema = SchemaFromType(info)
+                Name = info.Name.ToCamelCase()
             };
+
+            if (Attribute.IsDefined(info, typeof(TwinPropertyAttribute)))
+            {
+                var attr = info.GetCustomAttribute<TwinPropertyAttribute>();
+                if (attr != null)
+                {
+                    property.Schema = attr.Schema;
+                };
+            }
+
+            if (property.Schema == null)
+                property.Schema = SchemaFromType(info);
 
             if (Attribute.IsDefined(info, typeof(TwinTelemetryAttribute)))
             {

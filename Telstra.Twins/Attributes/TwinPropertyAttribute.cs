@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 
 namespace Telstra.Twins.Attributes
 {
@@ -29,5 +30,7 @@ namespace Telstra.Twins.Attributes
         /// The name of the digital twin property.
         /// </summary>
         public string Name { get; }
+
+        public string? Schema { get; set; }
     }
 }
