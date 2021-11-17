@@ -70,6 +70,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithNullableDateTimeModel,
                 typeof(TwinWithNullableDateTime)
             };
+            yield return new object[] {
+                DataGenerator.TwinWithSchemaOverrideModel,
+                typeof(TwinWithSchemaOverride)
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()

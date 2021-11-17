@@ -89,6 +89,13 @@ namespace Telstra.Twins.Test
         public DateTimeOffset? Manufactured { get; set; }
     }
 
+    [DigitalTwin(Version=1,DisplayName="Twin with schema override")]
+    public class TwinWithSchemaOverride: TwinBase
+    {
+        [TwinProperty]
+        public string ManufacturedDateOnly { get; set; }
+    }
+
     public static class DataGenerator
     {
         public static TwinWithNestedObject twinWithNestedObject = new TwinWithNestedObject()
@@ -150,5 +157,6 @@ namespace Telstra.Twins.Test
         public static string TwinWithDateTimeDTDL = "{\r\n  \"$dtId\": \"1234\",\r\n  \"$etag\": \"5678\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithdatetime;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"manufactured\": \"2021-11-17T22:23:00+10:00\"\r\n}";
         public static string TwinWithDateTimeModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithdatetime;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with dateTime\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"manufactured\",\r\n      \"schema\": \"dateTime\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithNullableDateTimeModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithnullabledatetime;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with nullable dateTime\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"manufactured\",\r\n      \"schema\": \"dateTime\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithSchemaOverrideModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithschemaoverride;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with schema override\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"manufacturedDateOnly\",\r\n      \"schema\": \"date\"\r\n    }\r\n  ]\r\n}";
     }
 }
