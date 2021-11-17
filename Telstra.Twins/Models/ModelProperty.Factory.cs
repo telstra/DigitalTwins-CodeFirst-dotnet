@@ -40,7 +40,10 @@ namespace Telstra.Twins.Models
             { typeof(double?), "double" },
             { typeof(int), "integer" },
             { typeof(int?), "integer" },
-            {typeof(Int64), "integer" }
+            { typeof(Int64), "integer" },
+            // Primitive type dateTime, which is date-time including offset from RFC 3339
+            // https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#primitive-schemas
+            { typeof(DateTimeOffset), "dateTime" }
         };
 
         internal static object SchemaFromType(PropertyInfo info)
