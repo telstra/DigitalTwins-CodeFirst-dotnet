@@ -16,8 +16,8 @@ namespace Telstra.Twins.Models
                 DisplayName = attr.DisplayName,
                 Comment = attr.Comment,
                 Description = attr.Description,
-                MaxMultiplicity = attr.MaxMultiplicity,
-                MinMultiplicity = attr.MinMultiplicity,
+                MaxMultiplicity = attr.MaxMultiplicity == 0 ? null : (int?)attr.MaxMultiplicity,
+                MinMultiplicity = attr.MinMultiplicity == 0 ? null : (int?)attr.MinMultiplicity,
                 Target = info.PropertyType.GetModelPropertyType().GetDigitalTwinModelId()
             };
         }
