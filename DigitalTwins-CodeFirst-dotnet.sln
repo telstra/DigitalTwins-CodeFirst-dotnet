@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D8068994
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telstra.Twins.Test", "Tests\Telstra.Twins.Test\Telstra.Twins.Test.csproj", "{4E5BF74D-C0EF-4D13-872C-F40FC347AD67}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{5BA14B5E-B883-4B92-802D-0BA49C93842B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactoryExample", "Examples\FactoryExample\FactoryExample.csproj", "{B1000F84-515B-4406-8B11-CC80051C531A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,8 +64,21 @@ Global
 		{4E5BF74D-C0EF-4D13-872C-F40FC347AD67}.Release|x64.Build.0 = Release|Any CPU
 		{4E5BF74D-C0EF-4D13-872C-F40FC347AD67}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E5BF74D-C0EF-4D13-872C-F40FC347AD67}.Release|x86.Build.0 = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|x64.Build.0 = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Debug|x86.Build.0 = Debug|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|x64.ActiveCfg = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|x64.Build.0 = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1000F84-515B-4406-8B11-CC80051C531A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E5BF74D-C0EF-4D13-872C-F40FC347AD67} = {D8068994-FDA6-41F1-9196-59AADA892F11}
+		{B1000F84-515B-4406-8B11-CC80051C531A} = {5BA14B5E-B883-4B92-802D-0BA49C93842B}
 	EndGlobalSection
 EndGlobal
