@@ -5,17 +5,18 @@ using Telstra.Twins.Attributes;
 namespace FactoryExample.Devices
 {
     [DigitalTwin(Version = 1, DisplayName = "Factory Production Steps - Interface Model")]
-    public class ProductionStep : Device
+    public class ProductionStep : TwinBase
     {
         [TwinProperty] public bool FinalStep { get; set; }
 
-        [TwinProperty] public ProductionStepStatus OperationStatus { get; set; }
+        //[TwinProperty] public ProductionStepStatus OperationStatus { get; set; }
 
-        [TwinProperty] public DateTimeOffset? StartTime { get; set; }
+        //[TwinProperty] public DateTimeOffset? StartTime { get; set; }
 
         [TwinProperty] public string? StepId { get; set; }
 
-        [TwinRelationship(DisplayName = "Step Link")]
+        //[TwinRelationship(DisplayName = "Step Link")]
+        [TwinRelationship(MaxMultiplicity = 500)]
         public ProductionStep? StepLink { get; set; }
 
         [TwinProperty] public string? StepName { get; set; }

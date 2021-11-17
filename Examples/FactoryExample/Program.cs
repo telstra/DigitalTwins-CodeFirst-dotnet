@@ -5,6 +5,7 @@ using Azure;
 using FactoryExample.Devices;
 using FactoryExample.Models;
 using FactoryExample.Schema;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Azure.DigitalTwins.Parser;
 using Microsoft.Extensions.Configuration;
 using Telstra.Twins.Core;
@@ -67,22 +68,33 @@ async Task CreateModels(Type[] modelTypes)
     {
         var parser = new ModelParser();
         var entityInfos = await parser.ParseAsync(models);
+        Console.WriteLine($"PARSE RESULTS:");
         foreach (var kvp in entityInfos)
         {
-            Console.WriteLine($"{kvp.Key} {kvp.Value}");
+            Console.WriteLine($"[{kvp.Key}] = {kvp.Value.EntityKind} {kvp.Value.Id} ({kvp.Value.DisplayName.FirstOrDefault().Value})");
+        }
+    }
+    catch (ParsingException ex)
+    {
+        Console.WriteLine($"PARSE FAILED: {ex.Message}");
+        Console.WriteLine($"ERRORS:");
+        var count = 0;
+        foreach (var error in ex.Errors)
+        {
+            Console.WriteLine($"{++count}. {error}");
         }
     }
     catch (RequestFailedException ex)
     {
-        Console.WriteLine($"Failed due to {ex}");
+        Console.WriteLine($"REQUEST FAILED: {ex.Message}");
     }
 }
 
 void ShowHelp()
 {
-    Console.WriteLine(" show model - shows the serialized model");
-    Console.WriteLine(" show example - shows a serialized twin");
-    Console.WriteLine(" create model - uploads the model");
+    Console.WriteLine(" --show model : shows the serialized model");
+    Console.WriteLine(" --show example : shows a serialized twin");
+    Console.WriteLine(" --create model : validate and uploads the model");
 }
 
 void ShowModels(Type[] modelTypes)
@@ -109,9 +121,9 @@ void ShowExamples()
         FinalStep = false,
         Force = 8.0,
         GrindingTime = 30,
-        OperationStatus = ProductionStepStatus.Online,
+        //OperationStatus = ProductionStepStatus.Online,
         PowerUsage = 100,
-        StartTime = new DateTimeOffset(2021, 11, 17, 19, 57, 0, TimeSpan.FromHours(10)),
+        //StartTime = new DateTimeOffset(2021, 11, 17, 19, 57, 0, TimeSpan.FromHours(10)),
         StepId = "step1",
         StepName = "GrindingStep"
     };
@@ -121,7 +133,7 @@ void ShowExamples()
         CurrentProductId = "production1",
         LineId = "line1",
         LineName = "ProductionLine",
-        LineOperationStatus = ProductionLineStatus.Online,
+        //LineOperationStatus = ProductionLineStatus.Online,
         ProductBatchNumber = 5
     };
     productionLine.RunsSteps.Add(productionStepGrinding);
@@ -139,7 +151,7 @@ void ShowExamples()
         ZipCode = "4000",
         FactoryName = "Chocolate Factory",
         GeoLocation = new GeoCord { Latitude = -27.4705, Longitude = 153.026 },
-        LastSupplyDate = new DateTimeOffset(2021, 11, 17, 18, 37, 0, TimeSpan.FromHours(10))
+        //LastSupplyDate = new DateTimeOffset(2021, 11, 17, 18, 37, 0, TimeSpan.FromHours(10))
     };
     factory.Floors.Add(factoryFloor);
 

@@ -13,10 +13,12 @@ namespace FactoryExample.Models
 
         [TwinProperty] public string? FloorName { get; set; }
 
-        [TwinRelationship(DisplayName = "Runs Production Lines")]
+        //[TwinRelationship(DisplayName = "Runs Production Lines")]
+        [TwinRelationship(MaxMultiplicity = 500)]
         public IList<ProductionLine> RunsLines { get; } = new List<ProductionLine>();
 
-        [TwinTelemetry(Unit = "degreeCelsius", SemanticType = "Temperature")]
+        //[TwinTelemetry(Unit = "degreeCelsius", SemanticType = "Temperature")]
+        [TwinTelemetry]
         public double? Temperature { get; set; }
     }
 }

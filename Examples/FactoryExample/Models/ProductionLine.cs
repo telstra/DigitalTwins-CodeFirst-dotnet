@@ -14,11 +14,12 @@ namespace FactoryExample.Models
 
         [TwinProperty] public string? LineName { get; set; }
 
-        [TwinProperty] public ProductionLineStatus LineOperationStatus { get; set; }
+        //[TwinProperty] public ProductionLineStatus LineOperationStatus { get; set; }
 
         [TwinProperty] public int? ProductBatchNumber { get; set; }
 
-        [TwinRelationship(DisplayName = "Runs Steps")]
+        //[TwinRelationship(DisplayName = "Runs Steps")]
+        [TwinRelationship(MaxMultiplicity = 500)]
         public IList<ProductionStep> RunsSteps { get; } = new List<ProductionStep>();
     }
 }
