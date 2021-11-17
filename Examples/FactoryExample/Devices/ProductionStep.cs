@@ -1,10 +1,11 @@
 ﻿using System;
+using Telstra.Twins;
 using Telstra.Twins.Attributes;
 
 namespace FactoryExample.Devices
 {
     [DigitalTwin(Version = 1, DisplayName = "Factory Production Steps - Interface Model")]
-    public class ProductionStep
+    public class ProductionStep : Device
     {
         [TwinProperty] public bool FinalStep { get; set; }
 

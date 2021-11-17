@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Telstra.Twins;
 using Telstra.Twins.Attributes;
 
 namespace FactoryExample.Models
 {
     [DigitalTwin(Version = 1, DisplayName = "Digital Factory - Interface Model")]
-    public class FactoryFloor
+    public class FactoryFloor : TwinBase
     {
         [TwinProperty] public double? ComfortIndex { get; set; }
 
