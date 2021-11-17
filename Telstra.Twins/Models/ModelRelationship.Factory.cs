@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using Telstra.Twins.Attributes;
-using Telstra.Twins.Helpers;
 using Telstra.Twins.Common;
+using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Models
 {
-    public partial class ModelRelationship : Content
+    public partial class ModelRelationship
     {
         public static ModelRelationship Create(PropertyInfo info)
         {
