@@ -78,6 +78,11 @@ The project follows a Feature Branch Workflow. So for each feature or bug a new 
 
 ## Testing
 Ensure that all new features added are tested and have unit tests for the same in the xUnit framework.
+
 # References
 This project is based on the Microsoft SDK recommendations outlined at 
 https://azure.github.io/azure-sdk/dotnet_introduction.html.
+
+The specifications for Digital Twins Definition Language version 2 (DTDLv2), are available 
+from Microsoft under a Creative Commons (Attribution) licence at:
+https://github.com/Azure/opendigitaltwins-dtdl
