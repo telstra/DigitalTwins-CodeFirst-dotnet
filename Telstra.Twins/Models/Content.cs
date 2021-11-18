@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace Telstra.Twins.Models
 {
-    public partial class Content
+    public class Content
     {
-        [JsonProperty("@type", Order = -3)]
-        [JsonPropertyName("@type")]
-        public string Type { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public object BaseType { get; set; }
 
         [JsonProperty("name", Order = -2)]
         [JsonPropertyName("name")]
@@ -16,5 +16,9 @@ namespace Telstra.Twins.Models
         [JsonProperty("schema", Order = -1)]
         [JsonPropertyName("schema")]
         public object Schema { get; set; }
+
+        [JsonProperty("@type", Order = -3)]
+        [JsonPropertyName("@type")]
+        public virtual object Type { get { return BaseType; } }
     }
 }

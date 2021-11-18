@@ -15,7 +15,7 @@ namespace Telstra.Twins.Models
             string target = null,
             bool? writable = null)
         {
-            Type = "Relationship";
+            BaseType = "Relationship";
             Name = name;
             DisplayName = displayName;
             Id = id;

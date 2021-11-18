@@ -4,7 +4,7 @@
     {
         public ModelComponent()
         {
-            this.Type = "Component";
+            this.BaseType = "Component";
         }
     }
 }

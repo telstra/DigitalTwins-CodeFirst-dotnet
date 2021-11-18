@@ -1,16 +1,36 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Telstra.Twins.Serialization;
 
 namespace Telstra.Twins.Models
 {
     public partial class ModelProperty : Content
     {
-        public string SemanticType { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public string Id { get; set; }
         public string Comment { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public string SemanticType { get; set; }
+
+        [JsonProperty("@type", Order = -3)]
+        [JsonPropertyName("@type")]
+        public override object Type
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(SemanticType))
+                    return BaseType;
+                return new[] { BaseType, SemanticType };
+            }
+        }
+
+        [JsonProperty("unit")]
+        [JsonPropertyName("unit")]
         public string Unit { get; set; }
+
         public bool? Writable { get; set; }
 
         public ModelProperty(string name,
@@ -36,7 +56,7 @@ namespace Telstra.Twins.Models
 
         public ModelProperty()
         {
-            this.Type = "Property";
+            this.BaseType = "Property";
         }
     }
 }
