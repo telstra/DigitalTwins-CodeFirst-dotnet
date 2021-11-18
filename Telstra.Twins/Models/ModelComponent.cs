@@ -1,10 +1,9 @@
 ﻿namespace Telstra.Twins.Models
 {
-    public partial class ModelComponent : Content
+    public partial class ModelComponent
     {
-        public ModelComponent()
+        public ModelComponent() : base("Component")
         {
-            this.BaseType = "Component";
         }
     }
 }

@@ -6,10 +6,10 @@ namespace Telstra.Twins.Models
 {
     public partial class ModelProperty : Content
     {
-        public string DisplayName { get; set; }
-        public string Description { get; set; }
-        public string Id { get; set; }
         public string Comment { get; set; }
+        public string Description { get; set; }
+        public string DisplayName { get; set; }
+        public string Id { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -41,7 +41,7 @@ namespace Telstra.Twins.Models
             string id = null,
             string comment = null,
             string unit = null,
-            bool? writable = null) : this()
+            bool? writable = null) : base("Property")
         {
             this.SemanticType = semanticType;
             this.DisplayName = displayName;
@@ -54,9 +54,8 @@ namespace Telstra.Twins.Models
             this.Schema = schema;
         }
 
-        public ModelProperty()
+        public ModelProperty(): base("Property")
         {
-            this.BaseType = "Property";
         }
     }
 }

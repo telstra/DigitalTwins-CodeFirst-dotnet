@@ -3,11 +3,18 @@ using Newtonsoft.Json;
 
 namespace Telstra.Twins.Models
 {
-    public class Content
+    public abstract class Content
     {
+        protected Content(string baseType, string name = null, object schema = null)
+        {
+            BaseType = baseType;
+            Name = name;
+            Schema = schema;
+        }
+
         [System.Text.Json.Serialization.JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
-        public object BaseType { get; set; }
+        public string BaseType { get; set; }
 
         [JsonProperty("name", Order = -2)]
         [JsonPropertyName("name")]

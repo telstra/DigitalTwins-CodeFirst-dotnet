@@ -13,9 +13,8 @@ namespace Telstra.Twins.Models
             int? maxMultiplicity = null,
             int? minMultiplicity = null,
             string target = null,
-            bool? writable = null)
+            bool? writable = null) : base("Relationship")
         {
-            BaseType = "Relationship";
             Name = name;
             DisplayName = displayName;
             Id = id;
