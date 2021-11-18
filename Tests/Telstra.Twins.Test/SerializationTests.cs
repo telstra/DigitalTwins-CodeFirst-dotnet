@@ -62,6 +62,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithRelationshipModel,
                 DataGenerator.twinWithRelationship.GetType()
             };
+            yield return new object[] {
+                DataGenerator.TwinWithMinMultiplicityModel,
+                typeof(TwinWithMinMultiplicity)
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()
