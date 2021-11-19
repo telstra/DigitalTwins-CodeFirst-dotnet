@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Telstra.Twins.Serialization;
-
-namespace Telstra.Twins.Models
+﻿namespace Telstra.Twins.Models
 {
     public partial class ModelProperty : Content
     {

@@ -8,7 +8,6 @@ namespace Telstra.Twins.Models
     public class TwinMetadata : DigitalTwinMetadata
     {
         // used to suppress model from component serialization
-        [Newtonsoft.Json.JsonIgnore]
         [JsonIgnore]
         public bool IsComponent { get; set; } = false;
     }
