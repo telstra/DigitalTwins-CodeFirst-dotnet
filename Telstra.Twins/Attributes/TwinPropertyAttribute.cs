@@ -30,7 +30,7 @@ namespace Telstra.Twins.Attributes
         /// <summary>
         ///     The name of the digital twin property.
         /// </summary>
-        public string Name { get; }
+        public string? Name { get; }
 
         /// <summary>
         ///     Gets or sets a value to manually override the generated schema for the property.
