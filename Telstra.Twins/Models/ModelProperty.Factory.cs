@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Telstra.Twins.Attributes;
@@ -17,14 +17,18 @@ namespace Telstra.Twins.Models
             { typeof(double?), "double" },
             { typeof(int), "integer" },
             { typeof(int?), "integer" },
-            { typeof(Int64), "integer" }
+            { typeof(Int64), "integer" },
+            // Primitive type dateTime, which is date-time including offset from RFC 3339
+            // https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#primitive-schemas
+            { typeof(DateTimeOffset), "dateTime" },
+            { typeof(DateTimeOffset?), "dateTime" }
         };
 
         public static ModelProperty Create(PropertyInfo info)
         {
             if (Attribute.IsDefined(info, typeof(TwinTelemetryAttribute)))
             {
-                var attr = info.GetCustomAttribute<TwinTelemetryAttribute>();
+                var telemetryAttribute = info.GetCustomAttribute<TwinTelemetryAttribute>();
 
                 var telemetry = new ModelProperty(
                     true,
@@ -34,18 +38,20 @@ namespace Telstra.Twins.Models
                     null,
                     null,
                     null,
-                    attr!.SemanticType,
-                    attr.Unit,
+                    telemetryAttribute!.SemanticType,
+                    telemetryAttribute.Unit,
                     null
                 );
 
                 return telemetry;
             }
 
+            var propertyAttribute = info.GetCustomAttribute<TwinPropertyAttribute>();
+
             var property = new ModelProperty(
                 false,
                 info.Name.ToCamelCase(),
-                SchemaFromType(info),
+                propertyAttribute.Schema ?? SchemaFromType(info),
                 null,
                 null,
                 null,
@@ -82,7 +88,7 @@ namespace Telstra.Twins.Models
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var arrayType = SchemaMap.TryGetValue(propertyType);
+                var arrayType = SchemaMap.GetValueOrDefault(propertyType);
                 schema.Add("elementSchema", arrayType);
                 return schema;
             }
@@ -91,7 +97,7 @@ namespace Telstra.Twins.Models
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var listType = SchemaMap.TryGetValue(propertyType.GetGenericArguments()[0]);
+                var listType = SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[0]);
                 schema.Add("elementSchema", listType);
                 return schema;
             }
@@ -105,7 +111,7 @@ namespace Telstra.Twins.Models
                 var mapKey = new NestedField("name", "string");
                 schema.Add("mapKey", mapKey);
                 var mapValue = new NestedField("name",
-                    SchemaMap.TryGetValue(propertyType.GetGenericArguments()[1]));
+                    SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[1]));
                 schema.Add("mapValue", mapValue);
                 return schema;
             }
@@ -119,7 +125,7 @@ namespace Telstra.Twins.Models
                 foreach (var fieldInfo in fieldsInfo)
                 {
                     fields.Add(new NestedField(fieldInfo.Name,
-                        SchemaMap.TryGetValue(fieldInfo.PropertyType)));
+                        SchemaMap.GetValueOrDefault(fieldInfo.PropertyType)));
                 }
 
                 schema.Add("fields", fields);
@@ -132,9 +138,10 @@ namespace Telstra.Twins.Models
 
     internal static class Extensions
     {
-        public static T TryGetValue<K, T>(this Dictionary<K, T> dict, K key)
+        public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
+            TKey key)
         {
-            return dict.ContainsKey(key) ? dict[key] : default;
+            return dictionary.TryGetValue(key, out TValue value) ? value : default;
         }
     }
 }
