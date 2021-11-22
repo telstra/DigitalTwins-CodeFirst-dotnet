@@ -1,23 +1,25 @@
-﻿using System;
+﻿#nullable enable
+using System;
 
 namespace Telstra.Twins.Attributes
 {
     /// <summary>
-    /// Specifies that a property is available both to the digital twin and the digital twin model.
-    /// It also optionally allows the property name to be specified.
+    ///     Specifies that a property is available both to the digital twin and the digital twin model.
+    ///     It also optionally allows the property name to be specified.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class TwinPropertyAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="TwinPropertyAttribute"/>.
+        ///     Initializes a new instance of <see cref="TwinPropertyAttribute" />.
         /// </summary>
         public TwinPropertyAttribute()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="TwinPropertyAttribute"/> with the specified model property name.
+        ///     Initializes a new instance of <see cref="TwinPropertyAttribute" /> with the specified model property
+        ///     name.
         /// </summary>
         /// <param name="name">The name of the model property.</param>
         public TwinPropertyAttribute(string name)
@@ -26,8 +28,13 @@ namespace Telstra.Twins.Attributes
         }
 
         /// <summary>
-        /// The name of the digital twin property.
+        ///     The name of the digital twin property.
         /// </summary>
-        public string Name { get; }
+        public string? Name { get; }
+
+        /// <summary>
+        ///     Gets or sets a value to manually override the generated schema for the property.
+        /// </summary>
+        public string? Schema { get; set; }
     }
 }
