@@ -1,17 +1,10 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Azure.DigitalTwins.Core;
-using Telstra.Twins.Attributes;
 using Telstra.Twins.Core;
-using Telstra.Twins.Models;
 using Telstra.Twins.Services;
 using Xunit;
 using Xunit.Abstractions;
-using FluentAssertions;
 
 namespace Telstra.Twins.Test
 {
