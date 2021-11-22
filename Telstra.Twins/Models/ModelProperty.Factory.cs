@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Dynamic;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 
@@ -9,13 +8,36 @@ namespace Telstra.Twins.Models
 {
     public partial class ModelProperty : Content
     {
+        private static readonly Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
+        {
+            { typeof(string), "string" },
+            { typeof(bool), "boolean" },
+            { typeof(bool?), "boolean" },
+            { typeof(double), "double" },
+            { typeof(double?), "double" },
+            { typeof(int), "integer" },
+            { typeof(int?), "integer" },
+            { typeof(Int64), "integer" },
+            // Primitive type dateTime, which is date-time including offset from RFC 3339
+            // https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#primitive-schemas
+            { typeof(DateTimeOffset), "dateTime" },
+            { typeof(DateTimeOffset?), "dateTime" }
+        };
+
         public static ModelProperty Create(PropertyInfo info)
         {
-            var property = new ModelProperty
+            var property = new ModelProperty { Name = info.Name.ToCamelCase() };
+
+            if (Attribute.IsDefined(info, typeof(TwinPropertyAttribute)))
             {
-                Name = info.Name.ToCamelCase(),
-                Schema = SchemaFromType(info)
-            };
+                var attr = info.GetCustomAttribute<TwinPropertyAttribute>();
+                if (attr != null)
+                {
+                    property.Schema = attr.Schema;
+                }
+            }
+
+            property.Schema ??= SchemaFromType(info);
 
             if (Attribute.IsDefined(info, typeof(TwinTelemetryAttribute)))
             {
@@ -25,90 +47,90 @@ namespace Telstra.Twins.Models
                     property.Type = "Telemetry";
                     property.SemanticType = attr.SemanticType;
                     property.Unit = attr.Unit;
-                };
+                }
             }
 
             return property;
         }
 
-        private static Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
-        {
-            { typeof(string), "string" },
-            { typeof(bool), "boolean" },
-            { typeof(bool?), "boolean" },
-            { typeof(double), "double" },
-            { typeof(double?), "double" },
-            { typeof(int), "integer" },
-            { typeof(int?), "integer" },
-            {typeof(Int64), "integer" }
-        };
-
-        internal static object SchemaFromType(PropertyInfo info)
+        private static object SchemaFromType(PropertyInfo info)
         {
             var propertyType = info.PropertyType;
-            if (SchemaMap.ContainsKey(propertyType))  
+            if (SchemaMap.ContainsKey(propertyType))
+            {
                 return SchemaMap[propertyType];
-            else if (propertyType.IsArray)
+            }
+
+            if (propertyType.IsArray)
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var arrayType = SchemaMap.TryGetValue<Type, string>(propertyType);
+                var arrayType = SchemaMap.GetValueOrDefault(propertyType);
                 schema.Add("elementSchema", arrayType);
                 return schema;
             }
-            else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(List<>))
+
+            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");
-                var listType = SchemaMap.TryGetValue<Type, string>(propertyType.GetGenericArguments()[0]);
+                var listType = SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[0]);
                 schema.Add("elementSchema", listType);
                 return schema;
             }
-            else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+
+            if (propertyType.IsGenericType &&
+                propertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
                 var schema = new Dictionary<string, Object>();
                 schema.Add("@type", "Map");
                 //TODO Logic to fill up the name field which is metadata
                 var mapKey = new NestedField("name", "string");
                 schema.Add("mapKey", mapKey);
-                var mapValue = new NestedField("name", SchemaMap.TryGetValue<Type, string>(propertyType.GetGenericArguments()[1]));
+                var mapValue = new NestedField("name",
+                    SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[1]));
                 schema.Add("mapValue", mapValue);
                 return schema;
             }
-            else if (propertyType.IsClass)
+
+            if (propertyType.IsClass)
             {
                 var schema = new Dictionary<string, object>();
                 schema.Add("@type", "Object");
                 var fields = new List<NestedField>();
                 var fieldsInfo = propertyType.GetProperties();
-                foreach(var fieldInfo in fieldsInfo)
+                foreach (var fieldInfo in fieldsInfo)
                 {
-                    fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.PropertyType)));
+                    fields.Add(new NestedField(fieldInfo.Name,
+                        SchemaMap.GetValueOrDefault(fieldInfo.PropertyType)));
                 }
+
                 schema.Add("fields", fields);
                 return schema;
             }
-            else return null;
+
+            return null;
         }
 
-        internal class NestedField
+        private class NestedField
         {
-            public NestedField (string name, string schema)
+            public NestedField(string name, string schema)
             {
                 this.name = name;
                 this.schema = schema;
             }
+
             public string name { get; set; }
             public string schema { get; set; }
         }
-
     }
 
     internal static class Extensions
     {
-        public static T TryGetValue<K,T>(this Dictionary<K,T> dict, K key)
+        public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
+            TKey key)
         {
-            return dict.ContainsKey(key) ? dict[key] : default(T);
+            return dictionary.TryGetValue(key, out TValue value) ? value : default;
         }
     }
 }
