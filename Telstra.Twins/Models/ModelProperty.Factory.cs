@@ -51,7 +51,7 @@ namespace Telstra.Twins.Models
             var property = new ModelProperty(
                 false,
                 info.Name.ToCamelCase(),
-                propertyAttribute.Schema ?? SchemaFromType(info),
+                propertyAttribute!.Schema ?? SchemaFromType(info),
                 null,
                 null,
                 null,
