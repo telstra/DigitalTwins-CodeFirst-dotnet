@@ -58,7 +58,7 @@ namespace Telstra.Twins.Models
                 null,
                 propertyAttribute.SemanticType,
                 propertyAttribute.Unit,
-                null
+                propertyAttribute.Writable ? (bool?)true : null
             );
 
             return property;
