@@ -10,18 +10,16 @@ namespace Telstra.Twins.Models
     {
         private static readonly Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
         {
-            { typeof(string), "string" },
-            { typeof(bool), "boolean" },
-            { typeof(bool?), "boolean" },
-            { typeof(double), "double" },
-            { typeof(double?), "double" },
-            { typeof(int), "integer" },
-            { typeof(int?), "integer" },
-            { typeof(Int64), "integer" },
-            // Primitive type dateTime, which is date-time including offset from RFC 3339
-            // https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#primitive-schemas
-            { typeof(DateTimeOffset), "dateTime" },
-            { typeof(DateTimeOffset?), "dateTime" }
+            { typeof(string), PrimitiveSchema.String },
+            { typeof(bool), PrimitiveSchema.Boolean },
+            { typeof(bool?), PrimitiveSchema.Boolean },
+            { typeof(double), PrimitiveSchema.Double },
+            { typeof(double?), PrimitiveSchema.Double },
+            { typeof(int), PrimitiveSchema.Integer },
+            { typeof(int?), PrimitiveSchema.Integer },
+            { typeof(Int64), PrimitiveSchema.Long },
+            { typeof(DateTimeOffset), PrimitiveSchema.DateTime },
+            { typeof(DateTimeOffset?), PrimitiveSchema.DateTime }
         };
 
         public static ModelProperty Create(PropertyInfo info)
@@ -108,7 +106,7 @@ namespace Telstra.Twins.Models
                 var schema = new Dictionary<string, Object>();
                 schema.Add("@type", "Map");
                 //TODO Logic to fill up the name field which is metadata
-                var mapKey = new NestedField("name", "string");
+                var mapKey = new NestedField("name", PrimitiveSchema.String);
                 schema.Add("mapKey", mapKey);
                 var mapValue = new NestedField("name",
                     SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[1]));

@@ -106,7 +106,7 @@ namespace Telstra.Twins.Test
         private class TwinWithSchemaOverride : TwinBase
         {
             // Prior to dotnet6, there was no DateOnly framework type
-            [TwinProperty(Schema = "date")] public string ManufacturedDateOnly { get; set; }
+            [TwinProperty(Schema = PrimitiveSchema.Date)] public string ManufacturedDateOnly { get; set; }
         }
 
         [DigitalTwin]
