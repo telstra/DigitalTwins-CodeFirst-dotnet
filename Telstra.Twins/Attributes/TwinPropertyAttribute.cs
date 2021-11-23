@@ -46,5 +46,10 @@ namespace Telstra.Twins.Attributes
         ///     Gets or sets the units of the semantic property.
         /// </summary>
         public string? Unit { get; set; }
+
+        /// <summary>
+        ///     Gets or sets whether the property is writable. The default is false.
+        /// </summary>
+        public bool Writable { get; set; }
     }
 }

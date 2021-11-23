@@ -52,6 +52,22 @@ namespace Telstra.Twins.Test
             JsonAssert.Equal(expectedModel, model);
         }
 
+        [Fact]
+        public void WriteablePropertyShouldSerialiseToModel()
+        {
+            var expectedModel = @"{
+""@id"": ""dtmi:telstra:twins:test:writablepropertytwin;1"",
+""@type"": ""Interface"",
+""@context"": ""dtmi:dtdl:context;2"",
+""contents"": [
+    {  ""@type"": ""Property"", ""name"": ""measurement"", ""schema"": ""integer"", ""writable"": true }
+]}";
+
+            var model = Serializer.SerializeModel(typeof(WritablePropertyTwin));
+
+            JsonAssert.Equal(expectedModel, model);
+        }
+
         [DigitalTwin]
         private class PropertyTwin : TwinBase
         {
@@ -63,6 +79,12 @@ namespace Telstra.Twins.Test
         {
             [TwinProperty(SemanticType = "Temperature", Unit = "degreeCelsius")]
             public int Target { get; set; }
+        }
+
+        [DigitalTwin]
+        private class WritablePropertyTwin : TwinBase
+        {
+            [TwinProperty(Writable = true)] public int Measurement { get; set; }
         }
     }
 }
