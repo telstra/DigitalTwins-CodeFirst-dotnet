@@ -56,8 +56,8 @@ namespace Telstra.Twins.Models
                 null,
                 null,
                 null,
-                null,
-                null,
+                propertyAttribute.SemanticType,
+                propertyAttribute.Unit,
                 null
             );
 
