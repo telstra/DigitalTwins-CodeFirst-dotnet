@@ -23,7 +23,7 @@ namespace Telstra.Twins.Test
 ""@type"": ""Interface"",
 ""@context"": ""dtmi:dtdl:context;2"",
 ""contents"": [
-    {  ""@type"": ""Property"", ""name"": ""measurement"", ""schema"": ""integer"" }
+    {  ""@type"": ""Property"", ""name"": ""counter"", ""schema"": ""integer"" }
 ]}";
 
             var model = Serializer.SerializeModel(typeof(PropertyTwin));
@@ -41,7 +41,7 @@ namespace Telstra.Twins.Test
 ""contents"": [
     {
         ""@type"": [""Property"", ""Temperature""],
-        ""name"": ""measurement"",
+        ""name"": ""target"",
         ""schema"": ""integer"",
         ""unit"": ""degreeCelsius""
     }
@@ -55,14 +55,14 @@ namespace Telstra.Twins.Test
         [DigitalTwin]
         private class PropertyTwin : TwinBase
         {
-            [TwinProperty] public int Measurement { get; set; }
+            [TwinProperty] public int Counter { get; set; }
         }
 
         [DigitalTwin]
         private class SemanticPropertyTwin : TwinBase
         {
             [TwinProperty(SemanticType = "Temperature", Unit = "degreeCelsius")]
-            public int Measurement { get; set; }
+            public int Target { get; set; }
         }
     }
 }
