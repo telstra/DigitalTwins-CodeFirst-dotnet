@@ -1,5 +1,6 @@
 ﻿using Telstra.Twins.Attributes;
 using Telstra.Twins.Core;
+using Telstra.Twins.Semantics;
 using Telstra.Twins.Services;
 using Xunit;
 
@@ -98,7 +99,7 @@ namespace Telstra.Twins.Test
         [DigitalTwin]
         private class SemanticPropertyTwin : TwinBase
         {
-            [TwinProperty(SemanticType = "Temperature", Unit = "degreeCelsius")]
+            [TwinProperty(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius)]
             public int Target { get; set; }
         }
 
