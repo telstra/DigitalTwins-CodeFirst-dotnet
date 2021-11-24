@@ -13,7 +13,7 @@ namespace SimpleExample.Models
         [TwinProperty] public string? FactoryName { get; set; }
 
         [TwinRelationship(DisplayName = "Has Floors")]
-        public List<FactoryFloor> Floors { get; set; } = new();
+        public List<FactoryFloor> Floors { get; set; } = new List<FactoryFloor>();
 
         [TwinProperty] public string? ZipCode { get; set; }
     }
