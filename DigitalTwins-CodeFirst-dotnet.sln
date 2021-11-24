@@ -15,6 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{5B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleExample", "Examples\SimpleExample\SimpleExample.csproj", "{BAB10325-0CE2-4528-A2FE-C65F74982D28}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2249F79B-DD17-4FAF-91B7-3E69A5E9546C}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+	LICENSE.md = LICENSE.md
+	CODE-OF-CONDUCT.md = CODE-OF-CONDUCT.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
