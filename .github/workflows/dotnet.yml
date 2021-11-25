@@ -1,10 +1,10 @@
-name: .NET Test
+name: .NET Build, Test, Package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, 'actions-test/**' ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -13,13 +13,38 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.11
+      with:
+        versionSpec: '5.8.1'
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0.9.11
+      id: gitversion
+      with:
+        useConfigFile: true
+
+    - name: Display Version
+      run: |
+        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+        echo "ShortSha: ${{ steps.gitversion.outputs.shortSha }}"
+        echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -c Debug -p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} -p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} -p:Version=${{ steps.gitversion.outputs.semVer }}+${{ steps.gitversion.outputs.shortSha }}
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack Telstra.Twins/Telstra.Twins.csproj --verbosity normal -c Release -p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} -p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} -p:Version=${{ steps.gitversion.outputs.semVer }}+${{ steps.gitversion.outputs.shortSha }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersion }} -o package
