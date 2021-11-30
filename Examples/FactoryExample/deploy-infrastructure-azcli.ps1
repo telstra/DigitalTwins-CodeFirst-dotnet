@@ -11,13 +11,12 @@ param (
 #
 # Running these scripts requires the following to be installed:
 # * PowerShell, https://github.com/PowerShell/PowerShell
-# * Azure PowerShell module, https://docs.microsoft.com/en-us/powershell/azure/install-az-ps
-#     Install-Module -Name Az -Scope CurrentUser -Force
-# * Azure Digital Twins module (preview installed separately)
-#     Install-Module -Name Az.DigitalTwins -Scope CurrentUser -Force
-#     Register-AzResourceProvider -ProviderNamespace Microsoft.DigitalTwins
+# * Azure CLI, https://docs.microsoft.com/en-us/cli/azure
+# * IoT Extension for Azure CLI:
+#     az extension add --upgrade --name azure-iot
+#     az provider register --namespace 'Microsoft.DigitalTwins'
 #
-# You also need to authenticate with: Connect-AzAccount
+# You also need to run `az login` to authenticate
 #
 # To see messages, set verbose preference before running:
 #   $VerbosePreference = 'Continue'
@@ -25,12 +24,9 @@ param (
 
 $ErrorActionPreference="Stop"
 
-if ($SubscriptionId) {
-  Write-Verbose "Setting context to subscription ID $SubscriptionId"
-  Set-AzContext -SubscriptionId $SubscriptionId
-} else {
-  $SubscriptionId = (Get-AzContext).Subscription
-  Write-Verbose "Using existing context subscription ID $SubscriptionId"
+if (-not $SubscriptionId) {
+  Write-Verbose "Using default subscription ID"
+  $SubscriptionId = (ConvertFrom-Json "$(az account show)").id
 }
 
 # Following standard naming conventions from Azure Cloud Adoption Framework
@@ -51,14 +47,18 @@ $Tag = @{ WorkloadName = 'codefirsttwins'; DataClassification = 'Non-business'; 
 
 # Create
 
-New-AzResourceGroup -Name $ResourceGroupName -Location $Location -Tag $Tag -Force
+az group create -g $ResourceGroupName -l $Location --subscription $SubscriptionId `
+  --tags "WorkloadName=$($Tag.WorkloadName)" "DataClassification=$($Tag.DataClassification)" "Criticality=$($Tag.Criticality)" `
+  "BusinessUnit=$($Tag.BusinessUnit)" "ApplicationName=$($Tag.ApplicationName)" "Env=$($Tag.Env)"
 
-New-AzDigitalTwinsInstance -ResourceGroupName $ResourceGroupName -ResourceName $DigitalTwinsName -Location $Location -Tag $Tag
+az dt create --dt-name $DigitalTwinsName --resource-group $ResourceGroupName --location $Location `
+  --tags "WorkloadName=$($Tag.WorkloadName)" "DataClassification=$($Tag.DataClassification)" "Criticality=$($Tag.Criticality)" `
+  "BusinessUnit=$($Tag.BusinessUnit)" "ApplicationName=$($Tag.ApplicationName)" "Env=$($Tag.Env)"
 
-New-AzIotHub -ResourceGroupName $ResourceGroupName -Name $IotHubName -SkuName S1 -Units 1 -Location $Location -Tag $Tag
+az iot hub create --name $IotHubName --resource-group $ResourceGroupName --sku S1 `
+  --tags "WorkloadName=$($Tag.WorkloadName)" "DataClassification=$($Tag.DataClassification)" "Criticality=$($Tag.Criticality)" `
+  "BusinessUnit=$($Tag.BusinessUnit)" "ApplicationName=$($Tag.ApplicationName)" "Env=$($Tag.Env)"
 
 # Output
 
-(Get-AzDigitalTwinsInstance -ResourceGroupName $ResourceGroupName -ResourceName $DigitalTwinsName).HostName
-(Get-AzIotHub $ResourceGroupName).Properties.HostName
-
+az dt show --dt-name $DigitalTwinsName
