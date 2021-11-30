@@ -37,7 +37,7 @@ if ($SubscriptionId) {
 # https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
 
 # Include an subscription or organisation identifier (after app name) in global names to make them unique 
-$OrgId = "x$($SubscriptionId.Substring(0,4))"
+$OrgId = "0x$($SubscriptionId.Substring(0,4))"
 
 $ResourceGroupName = "rg-$AppName-$Environment-001"
 $DigitalTwinsName = "dt-$AppName-$OrgId-$Environment"
