@@ -1,6 +1,4 @@
-namespace Telstra.Twins.Models
 using System.Text.Json.Serialization;
-using Telstra.Twins.Serialization;
 
 namespace Telstra.Twins.Models
 {
@@ -15,7 +13,6 @@ namespace Telstra.Twins.Models
         [Newtonsoft.Json.JsonIgnore]
         public string SemanticType { get; set; }
 
-        [JsonProperty("@type", Order = -3)]
         [JsonPropertyName("@type")]
         public override object Type
         {
@@ -27,7 +24,6 @@ namespace Telstra.Twins.Models
             }
         }
 
-        [JsonProperty("unit")]
         [JsonPropertyName("unit")]
         public string Unit { get; set; }
 
