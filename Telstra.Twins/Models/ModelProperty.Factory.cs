@@ -6,7 +6,7 @@ using Telstra.Twins.Common;
 
 namespace Telstra.Twins.Models
 {
-    public partial class ModelProperty : Content
+    public partial class ModelProperty
     {
         private static readonly Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
         {
@@ -44,7 +44,7 @@ namespace Telstra.Twins.Models
                 var attr = info.GetCustomAttribute<TwinTelemetryAttribute>();
                 if (attr != null)
                 {
-                    property.Type = "Telemetry";
+                    property.BaseType = "Telemetry";
                     property.SemanticType = attr.SemanticType;
                     property.Unit = attr.Unit;
                 }
