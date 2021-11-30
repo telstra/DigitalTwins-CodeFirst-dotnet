@@ -1,0 +1,113 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "IotHubs_iot_codefirsttwins_0xacc5_demo_connectionString": {
+      "type": "SecureString"
+    },
+    "IotHubs_iot_codefirsttwins_0xacc5_demo_containerName": {
+      "type": "SecureString"
+    },
+    "IotHubs_iot_codefirsttwins_0xacc5_demo_name": {
+      "type": "String"
+    },
+    "digitalTwinsInstances_dt_codefirsttwins_0xacc5_demo_name": {
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Devices/IotHubs",
+      "apiVersion": "2021-07-01",
+      "name": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_name')]",
+      "location": "australiaeast",
+      "tags": {
+        "ApplicationName": "codefirsttwins",
+        "WorkloadName": "codefirsttwins",
+        "DataClassification": "Non-business",
+        "Criticality": "Low",
+        "BusinessUnit": "Demo",
+        "Env": "demo"
+      },
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "capacity": 1
+      },
+      "identity": {
+        "type": "None"
+      },
+      "properties": {
+        "ipFilterRules": [],
+        "eventHubEndpoints": {
+          "events": {
+            "retentionTimeInDays": 1,
+            "partitionCount": 4
+          }
+        },
+        "routing": {
+          "endpoints": {
+            "serviceBusQueues": [],
+            "serviceBusTopics": [],
+            "eventHubs": [],
+            "storageContainers": []
+          },
+          "routes": [],
+          "fallbackRoute": {
+            "name": "$fallback",
+            "source": "DeviceMessages",
+            "condition": "true",
+            "endpointNames": [
+              "events"
+            ],
+            "isEnabled": true
+          }
+        },
+        "storageEndpoints": {
+          "$default": {
+            "sasTtlAsIso8601": "PT1H",
+            "connectionString": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_connectionString')]",
+            "containerName": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_containerName')]"
+          }
+        },
+        "messagingEndpoints": {
+          "fileNotifications": {
+            "lockDurationAsIso8601": "PT1M",
+            "ttlAsIso8601": "PT1H",
+            "maxDeliveryCount": 10
+          }
+        },
+        "enableFileUploadNotifications": false,
+        "cloudToDevice": {
+          "maxDeliveryCount": 10,
+          "defaultTtlAsIso8601": "PT1H",
+          "feedback": {
+            "lockDurationAsIso8601": "PT1M",
+            "ttlAsIso8601": "PT1H",
+            "maxDeliveryCount": 10
+          }
+        },
+        "features": "None"
+      }
+    },
+    {
+      "type": "Microsoft.DigitalTwins/digitalTwinsInstances",
+      "apiVersion": "2020-12-01",
+      "name": "[parameters('digitalTwinsInstances_dt_codefirsttwins_0xacc5_demo_name')]",
+      "location": "australiaeast",
+      "tags": {
+        "ApplicationName": "codefirsttwins",
+        "WorkloadName": "codefirsttwins",
+        "DataClassification": "Non-business",
+        "Criticality": "Low",
+        "BusinessUnit": "Demo",
+        "Env": "demo"
+      },
+      "properties": {
+        "privateEndpointConnections": [],
+        "publicNetworkAccess": "Enabled"
+      }
+    }
+  ]
+}
