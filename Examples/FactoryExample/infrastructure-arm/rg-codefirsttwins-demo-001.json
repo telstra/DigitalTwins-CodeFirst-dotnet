@@ -1,119 +1,84 @@
 // Connect-AzAccount
 // Set-AzContext -Subscription <subscription id>
-// New-AzResourceGroupDeployment -ResourceGroupName 'rg-codefirsttwins-demo-001' -TemplateFile 'rg-codefirsttwins-demo-001.json' -TemplateParameterObject @{ OrgId = "0x$((Get-AzContext).Subscription.Id.Substring(0,4))" }
+// New-AzDeployment -Location 'australiaeast' -TemplateFile 'infrastructure-arm/rg-codefirsttwins-demo-001.json'
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "AppName": {
+    "appName": {
       "type": "String",
       "defaultValue": "codefirsttwins"
     },
-    "Environment": {
+    "environment": {
       "type": "String",
       "defaultValue": "demo"
     },
-    "Location": {
+    "location": {
       "type": "String",
-      "defaultValue": "australiaeast"
+      "defaultValue": "[deployment().location]"
     },
-    "OrgId": {
-      "type": "String"
-    },
-    "IotHubs_iot_codefirsttwins_0xacc5_demo_connectionString": {
-      "type": "SecureString"
-    },
-    "IotHubs_iot_codefirsttwins_0xacc5_demo_containerName": {
-      "type": "SecureString"
+    "orgId": {
+      "type": "String",
+      "defaultValue": "[concat('0x',substring(subscription().subscriptionId, 0, 4))]"
     }
   },
   "variables": {
     "tags": {
-      "ApplicationName": "[parameters('AppName')]",
+      "ApplicationName": "[parameters('appName')]",
       "WorkloadName": "codefirsttwins",
       "DataClassification": "Non-business",
       "Criticality": "Low",
       "BusinessUnit": "Demo",
-      "Env": "[parameters('Environment')]"
-    }
+      "Env": "[parameters('environment')]"
+    },
+    "rgName": "[concat('rg-',parameters('appName'),'-',parameters('environment'),'-001')]"
   },
   "resources": [
     {
-      "type": "Microsoft.Devices/IotHubs",
-      "apiVersion": "2021-07-01",
-      "name": "[concat('iot-',parameters('AppName'),'-',parameters('OrgId'),'-',parameters('Environment'))]",
-      "location": "australiaeast",
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-04-01",
+      "name": "[variables('rgName')]",
+      "location": "[parameters('location')]",
       "tags": "[variables('tags')]",
-      "sku": {
-        "name": "S1",
-        "tier": "Standard",
-        "capacity": 1
-      },
-      "identity": {
-        "type": "None"
-      },
-      "properties": {
-        "ipFilterRules": [],
-        "eventHubEndpoints": {
-          "events": {
-            "retentionTimeInDays": 1,
-            "partitionCount": 4
-          }
-        },
-        "routing": {
-          "endpoints": {
-            "serviceBusQueues": [],
-            "serviceBusTopics": [],
-            "eventHubs": [],
-            "storageContainers": []
-          },
-          "routes": [],
-          "fallbackRoute": {
-            "name": "$fallback",
-            "source": "DeviceMessages",
-            "condition": "true",
-            "endpointNames": [
-              "events"
-            ],
-            "isEnabled": true
-          }
-        },
-        "storageEndpoints": {
-          "$default": {
-            "sasTtlAsIso8601": "PT1H",
-            "connectionString": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_connectionString')]",
-            "containerName": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_containerName')]"
-          }
-        },
-        "messagingEndpoints": {
-          "fileNotifications": {
-            "lockDurationAsIso8601": "PT1M",
-            "ttlAsIso8601": "PT1H",
-            "maxDeliveryCount": 10
-          }
-        },
-        "enableFileUploadNotifications": false,
-        "cloudToDevice": {
-          "maxDeliveryCount": 10,
-          "defaultTtlAsIso8601": "PT1H",
-          "feedback": {
-            "lockDurationAsIso8601": "PT1M",
-            "ttlAsIso8601": "PT1H",
-            "maxDeliveryCount": 10
-          }
-        },
-        "features": "None"
-      }
+      "properties": {}
     },
     {
-      "type": "Microsoft.DigitalTwins/digitalTwinsInstances",
-      "apiVersion": "2020-12-01",
-      "name": "[concat('dt-',parameters('AppName'),'-',parameters('OrgId'),'-',parameters('Environment'))]",
-      "location": "australiaeast",
-      "tags": "[variables('tags')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "demoDeployment",
+      "resourceGroup": "[variables('rgName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups/', variables('rgName'))]"
+      ],
       "properties": {
-        "privateEndpointConnections": [],
-        "publicNetworkAccess": "Enabled"
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+              "type": "Microsoft.Devices/IotHubs",
+              "apiVersion": "2021-07-01",
+              "name": "[concat('iot-',parameters('appName'),'-',parameters('orgId'),'-',parameters('environment'))]",
+              "location": "[parameters('location')]",
+              "tags": "[variables('tags')]",
+              "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "capacity": 1
+              }
+            },
+            {
+              "type": "Microsoft.DigitalTwins/digitalTwinsInstances",
+              "apiVersion": "2020-12-01",
+              "name": "[concat('dt-',parameters('appName'),'-',parameters('orgId'),'-',parameters('environment'))]",
+              "location": "[parameters('location')]",
+              "tags": "[variables('tags')]"
+            }
+          ]
+        }
       }
     }
   ]
