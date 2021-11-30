@@ -1,35 +1,49 @@
+// Connect-AzAccount
+// Set-AzContext -Subscription <subscription id>
+// New-AzResourceGroupDeployment -ResourceGroupName 'rg-codefirsttwins-demo-001' -TemplateFile 'rg-codefirsttwins-demo-001.json' -TemplateParameterObject @{ OrgId = "0x$((Get-AzContext).Subscription.Id.Substring(0,4))" }
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "AppName": {
+      "type": "String",
+      "defaultValue": "codefirsttwins"
+    },
+    "Environment": {
+      "type": "String",
+      "defaultValue": "demo"
+    },
+    "Location": {
+      "type": "String",
+      "defaultValue": "australiaeast"
+    },
+    "OrgId": {
+      "type": "String"
+    },
     "IotHubs_iot_codefirsttwins_0xacc5_demo_connectionString": {
       "type": "SecureString"
     },
     "IotHubs_iot_codefirsttwins_0xacc5_demo_containerName": {
       "type": "SecureString"
-    },
-    "IotHubs_iot_codefirsttwins_0xacc5_demo_name": {
-      "type": "String"
-    },
-    "digitalTwinsInstances_dt_codefirsttwins_0xacc5_demo_name": {
-      "type": "String"
     }
   },
-  "variables": {},
+  "variables": {
+    "tags": {
+      "ApplicationName": "[parameters('AppName')]",
+      "WorkloadName": "codefirsttwins",
+      "DataClassification": "Non-business",
+      "Criticality": "Low",
+      "BusinessUnit": "Demo",
+      "Env": "[parameters('Environment')]"
+    }
+  },
   "resources": [
     {
       "type": "Microsoft.Devices/IotHubs",
       "apiVersion": "2021-07-01",
-      "name": "[parameters('IotHubs_iot_codefirsttwins_0xacc5_demo_name')]",
+      "name": "[concat('iot-',parameters('AppName'),'-',parameters('OrgId'),'-',parameters('Environment'))]",
       "location": "australiaeast",
-      "tags": {
-        "ApplicationName": "codefirsttwins",
-        "WorkloadName": "codefirsttwins",
-        "DataClassification": "Non-business",
-        "Criticality": "Low",
-        "BusinessUnit": "Demo",
-        "Env": "demo"
-      },
+      "tags": "[variables('tags')]",
       "sku": {
         "name": "S1",
         "tier": "Standard",
@@ -94,16 +108,9 @@
     {
       "type": "Microsoft.DigitalTwins/digitalTwinsInstances",
       "apiVersion": "2020-12-01",
-      "name": "[parameters('digitalTwinsInstances_dt_codefirsttwins_0xacc5_demo_name')]",
+      "name": "[concat('dt-',parameters('AppName'),'-',parameters('OrgId'),'-',parameters('Environment'))]",
       "location": "australiaeast",
-      "tags": {
-        "ApplicationName": "codefirsttwins",
-        "WorkloadName": "codefirsttwins",
-        "DataClassification": "Non-business",
-        "Criticality": "Low",
-        "BusinessUnit": "Demo",
-        "Env": "demo"
-      },
+      "tags": "[variables('tags')]",
       "properties": {
         "privateEndpointConnections": [],
         "publicNetworkAccess": "Enabled"
