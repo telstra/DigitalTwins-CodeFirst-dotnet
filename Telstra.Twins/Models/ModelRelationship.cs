@@ -1,14 +1,36 @@
 ﻿using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+
 namespace Telstra.Twins.Models
 {
     public partial class ModelRelationship : Content
     {
+        public ModelRelationship(string name,
+            string displayName = null,
+            string id = null,
+            string comment = null,
+            string description = null,
+            int? maxMultiplicity = null,
+            int? minMultiplicity = null,
+            string target = null,
+            bool? writable = null) : base("Relationship")
+        {
+            Name = name;
+            DisplayName = displayName;
+            Id = id;
+            Comment = comment;
+            Description = description;
+            MaxMultiplicity = maxMultiplicity;
+            MinMultiplicity = minMultiplicity;
+            Target = target;
+            Writable = writable;
+        }
 
-        public string Id { get; set; }
         public string Comment { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
+
+        public string Id { get; set; }
 
         [JsonPropertyName("maxMultiplicity")]
         [JsonProperty("maxMultiplicity")]
@@ -21,28 +43,7 @@ namespace Telstra.Twins.Models
         [JsonProperty("target")]
         [JsonPropertyName("target")]
         public string Target { get; set; }
-        public bool? Writable { get; set; }
 
-        public ModelRelationship(string name,
-            string displayName = null,
-            string id = null,
-            string comment = null,
-            string description = null,
-            int? maxMultiplicity = null,
-            int? minMultiplicity = null,
-            string target = null,
-            bool? writable = null)
-        {
-            this.Type = "Relationship";
-            this.Name = name;
-            this.DisplayName = displayName;
-            this.Id = id;
-            this.Comment = comment;
-            this.Description = description;
-            this.MaxMultiplicity = maxMultiplicity;
-            this.MinMultiplicity = minMultiplicity;
-            this.Target = target;
-            this.Writable = writable;
-        }
+        public bool? Writable { get; set; }
     }
 }
