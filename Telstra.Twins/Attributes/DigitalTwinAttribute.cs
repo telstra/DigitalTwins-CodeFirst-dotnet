@@ -1,7 +1,5 @@
 ﻿#nullable enable
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 // ReSharper disable InconsistentNaming
 
 namespace Telstra.Twins.Attributes
@@ -44,28 +42,10 @@ namespace Telstra.Twins.Attributes
         public string? ExtendsModelId { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="Type"/> of the <see cref="NamingStrategy"/>.
-        /// </summary>
-        /// <value>The <see cref="Type"/> of the <see cref="NamingStrategy"/>.</value>
-        public Type? NamingStrategyType
-        {
-            get => _namingStrategyType;
-            set
-            {
-                _namingStrategyType = value;
-                NamingStrategyInstance = null;
-            }
-        }
-
-        private Type? _namingStrategyType;
-        internal NamingStrategy? NamingStrategyInstance { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DigitalTwinAttribute"/> class.
         /// </summary>
         public DigitalTwinAttribute()
         {
-            NamingStrategyType = typeof(CamelCaseNamingStrategy);
         }
     }
 }

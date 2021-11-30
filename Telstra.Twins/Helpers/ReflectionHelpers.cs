@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -152,11 +151,6 @@ namespace Telstra.Twins.Helpers
                 var customAttribute = p.GetCustomAttribute<JsonPropertyNameAttribute>();
                 twinPropertyName = customAttribute?.Name;
             }
-            else if (Attribute.IsDefined(p, typeof(JsonPropertyAttribute)))
-            {
-                var customAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
-                twinPropertyName = customAttribute?.PropertyName;
-            }
 
             return twinPropertyName ?? p.Name.ToCamelCase();
         }
@@ -172,8 +166,8 @@ namespace Telstra.Twins.Helpers
             }
             else if (Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
             {
-                var modelOnlyPropertyAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
-                modelPropertyName = modelOnlyPropertyAttribute?.PropertyName;
+                var modelOnlyPropertyAttribute = p.GetCustomAttribute<JsonPropertyNameAttribute>(); 
+                modelPropertyName = modelOnlyPropertyAttribute?.Name;
             }
 
             return modelPropertyName;
@@ -187,11 +181,6 @@ namespace Telstra.Twins.Helpers
             {
                 var jsonNameAttribute = p.GetCustomAttribute<JsonPropertyNameAttribute>();
                 jsonPropertyName = jsonNameAttribute?.Name;
-            } 
-            else if (Attribute.IsDefined(p, typeof(JsonPropertyAttribute)))
-            {
-                var jsonNameAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
-                jsonPropertyName = jsonNameAttribute?.PropertyName;
             }
 
             return jsonPropertyName;

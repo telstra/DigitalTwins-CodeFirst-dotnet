@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telstra.Twins", "Telstra.Twins\Telstra.Twins.csproj", "{C1F33CDE-6D9F-4533-97DA-4168525D48B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telstra.Twins.Common", "Telstra.Twins.Common\Telstra.Twins.Common.csproj", "{0B3217F0-CF2D-479B-ADB9-3FB58A1845DE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D8068994-FDA6-41F1-9196-59AADA892F11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telstra.Twins.Test", "Tests\Telstra.Twins.Test\Telstra.Twins.Test.csproj", "{4E5BF74D-C0EF-4D13-872C-F40FC347AD67}"

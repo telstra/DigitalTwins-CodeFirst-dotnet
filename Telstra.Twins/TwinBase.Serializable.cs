@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Azure.DigitalTwins.Core;
-using Newtonsoft.Json;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Helpers;
 using Telstra.Twins.Common;
@@ -163,7 +162,6 @@ namespace Telstra.Twins
 
         [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
         [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
         public string TwinId { get; set; }
 
         /// <summary>
@@ -171,12 +169,10 @@ namespace Telstra.Twins
         /// </summary>
         [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
         [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
         public string ETag { get; set; }
 
         [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
         [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
         public virtual TwinMetadata Metadata { get; set; } = new TwinMetadata();
 
         private void ReadAttributeInfo()
