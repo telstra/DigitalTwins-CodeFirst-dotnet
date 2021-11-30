@@ -29,7 +29,7 @@ if ($SubscriptionId) {
   Write-Verbose "Setting context to subscription ID $SubscriptionId"
   Set-AzContext -SubscriptionId $SubscriptionId
 } else {
-  $SubscriptionId = (Get-AzContext).Subscription
+  $SubscriptionId = (Get-AzContext).Subscription.Id
   Write-Verbose "Using existing context subscription ID $SubscriptionId"
 }
 
