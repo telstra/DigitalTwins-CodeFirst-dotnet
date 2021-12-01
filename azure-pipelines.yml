@@ -1,19 +1,86 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- main
+  # Do not change. Expected pipeline name format: yyyyMMdd.buildCounter.revision
+name: $(Date:yyyyMMdd).$(Rev:r).$(localBuildCounter)
 
 pool:
-  vmImage: ubuntu-latest
+  # Currently we don't support publishing symbols from a Linux machine
+  vmImage: 'windows-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Build ADT'
+variables:
+  localBuildCounter: $[counter('buildCounter',1)]
+  buildConfiguration: 'Release'
+  localPreReleaseTag: '-alpha'
+  versionNumber: '1.0.5'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: P8 Software Development Life Cycle (SDLC)/P8BuildTemplates
+      ref: master
+
+trigger: 
+- main
+- release
+
+jobs:
+- job: Build
+   
+  variables:
+    - template: global-variables.yml@templates
+
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '5.x'
+
+  # Create and set the variables preReleaseTag, manifestTagPrefix and packageVersion
+  - template: steps/set-build-variables.yml@templates
+    parameters:
+      versionNumber: $(versionNumber) 
+      localPreReleaseTag: $(localPreReleaseTag) 
+      buildCounter: $(localBuildCounter) 
+
+  - template: steps/set-assembly-versions.yml@templates
+    parameters:
+      filenames: '**/*.csproj'
+      versionnumber: $(versionnumber) 
+      localbuildcounter: $(localbuildcounter)
+      packageversion: $(packageversion)
+
+  - template: steps/dotnet-restore.yml@templates
+    parameters:
+      projects: '**/*.csproj'
+      vstsfeed: ${{ variables.vstsfeed }}
+
+  - template: steps/dotnet-build.yml@templates
+    parameters:
+      projects: '**/*.csproj'
+  
+  - template: steps/dotnet-test-and-cover.yml@templates
+    parameters:
+      projects: '**/*.Test.csproj'
+
+  - template: steps/create-and-publish-cover-report.yml@templates
+    parameters:
+      fileshareglobaldirectory: 'p661DigitalTwinsCodeFirst'
+
+  - template: steps/dotnet-pack-and-push-nuget-packages.yml@templates
+    parameters:
+      condition: and(succeeded(), ne(variables['build.reason'], 'pullrequest')) 
+      packagestopack: '**/*.csproj'
+      packagestopush: '$(build.artifactstagingdirectory)/*.nupkg'
+      vstsfeed: ${{ variables.vstsfeed }}
+
+  - template: steps/index-sources-and-publish-symbols.yml@templates
+    parameters:
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+      searchPattern: |
+        **/bin/Release/**/*.pdb
+        !**.Test/bin/**/*.pdb
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish Artifact'
+    inputs:
+      PathtoPublish: '$(build.artifactstagingdirectory)'
