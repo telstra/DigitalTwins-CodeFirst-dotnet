@@ -1,7 +1,6 @@
 #!/usr/bin/env pwsh
 [CmdletBinding()]
 param (
-    [string]$SubscriptionId = $null,
     [string]$AppName = 'codefirsttwins',
     [string]$Environment = 'demo',
     [string]$Location = 'australiaeast'
@@ -17,7 +16,9 @@ param (
 #     Install-Module -Name Az.DigitalTwins -Scope CurrentUser -Force
 #     Register-AzResourceProvider -ProviderNamespace Microsoft.DigitalTwins
 #
-# You also need to authenticate with: Connect-AzAccount
+# You also need to authenticate and set subscription you are using:
+#  Connect-AzAccount
+#  Set-AzContext -SubscriptionId $SubscriptionId
 #
 # To see messages, set verbose preference before running:
 #   $VerbosePreference = 'Continue'
@@ -25,13 +26,8 @@ param (
 
 $ErrorActionPreference="Stop"
 
-if ($SubscriptionId) {
-  Write-Verbose "Setting context to subscription ID $SubscriptionId"
-  Set-AzContext -SubscriptionId $SubscriptionId
-} else {
-  $SubscriptionId = (Get-AzContext).Subscription.Id
-  Write-Verbose "Using existing context subscription ID $SubscriptionId"
-}
+$SubscriptionId = (Get-AzContext).Subscription.Id
+Write-Verbose "Using context subscription ID $SubscriptionId"
 
 # Following standard naming conventions from Azure Cloud Adoption Framework
 # https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
