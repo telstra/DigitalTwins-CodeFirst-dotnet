@@ -58,18 +58,18 @@ namespace Telstra.Twins.Test
         public SimpleTwin Relationship { get; set; }
     }
 
-    [DigitalTwin(Version=1,DisplayName="Twin with min multiplicity")]
-    public class TwinWithMinMultiplicity: TwinBase
+    [DigitalTwin(Version = 1, DisplayName = "Twin with min multiplicity")]
+    public class TwinWithMinMultiplicity : TwinBase
     {
         [TwinProperty]
         public int Count { get; set; }
 
         [TwinRelationship(Name = "Test Relationship", MinMultiplicity = 2)]
-        public SimpleTwin Relationship { get; set;}
+        public SimpleTwin Relationship { get; set; }
     }
-    
-    [DigitalTwin(Version=1,DisplayName="Twin with a nested object")]
-    public class TwinWithNestedObject: TwinBase
+
+    [DigitalTwin(Version = 1, DisplayName = "Twin with a nested object")]
+    public class TwinWithNestedObject : TwinBase
     {
         public TwinWithNestedObject()
         { }
@@ -113,22 +113,22 @@ namespace Telstra.Twins.Test
 
     }
 
-    [DigitalTwin(Version=1,DisplayName="Twin with dateTime")]
-    public class TwinWithDateTime: TwinBase
+    [DigitalTwin(Version = 1, DisplayName = "Twin with dateTime")]
+    public class TwinWithDateTime : TwinBase
     {
         [TwinProperty]
         public DateTimeOffset Manufactured { get; set; }
     }
 
-    [DigitalTwin(Version=1,DisplayName="Twin with nullable dateTime")]
-    public class TwinWithNullableDateTime: TwinBase
+    [DigitalTwin(Version = 1, DisplayName = "Twin with nullable dateTime")]
+    public class TwinWithNullableDateTime : TwinBase
     {
         [TwinProperty]
         public DateTimeOffset? Manufactured { get; set; }
     }
 
-    [DigitalTwin(Version=1,DisplayName="Twin with schema override")]
-    public class TwinWithSchemaOverride: TwinBase
+    [DigitalTwin(Version = 1, DisplayName = "Twin with schema override")]
+    public class TwinWithSchemaOverride : TwinBase
     {
         // Prior to dotnet6, there was no DateOnly framework type
         [TwinProperty(Schema = "date")]
@@ -190,8 +190,8 @@ namespace Telstra.Twins.Test
         public static string TwinWithNestedObjectDTDL = "{\r\n  \"$dtId\": \"11111\",\r\n  \"$etag\": \"abcd\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"speed\": 50,\r\n  \"nestedObj\": {\r\n    \"name\": \"name\",\r\n    \"value\": \"value\"\r\n  }\r\n}";
         public static string TwinWithNestedObjectModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a nested object\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"nestedObj\",\r\n      \"schema\": {\r\n        \"@type\": \"Object\",\r\n        \"fields\": [\r\n          {\r\n            \"name\": \"name\",\r\n            \"schema\": \"string\"\r\n          },\r\n          {\r\n            \"name\": \"value\",\r\n            \"schema\": \"string\"\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"speed\",\r\n      \"schema\": \"integer\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithRelationshipDTDL = "    {\r\n  \"$dtId\": \"1221\",\r\n  \"$etag\": \"Etag\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithrelationship;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"count\": 10\r\n}";
-        public static string TwinWithRelationshipModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithrelationship;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a relationship\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 5,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"relationship\"\r\n    }\r\n  ]\r\n}";
-        public static string TwinWithMinMultiplicityModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithminmultiplicity;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with min multiplicity\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"minMultiplicity\": 2,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"relationship\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithRelationshipModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithrelationship;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a relationship\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 5,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"testRelationship\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithMinMultiplicityModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithminmultiplicity;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with min multiplicity\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"minMultiplicity\": 2,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"test Relationship\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithAllAttributesDTDL = "{\r\n  \"$dtId\": \"0\",\r\n  \"$etag\": \"0\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithallattributes;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"flag\": true,\r\n  \"testProperty\": \"property\",\r\n  \"intArray\": [\r\n    1,\r\n    2,\r\n    3\r\n  ],\r\n  \"stringMap\": {\r\n    \"key\": \"value\"\r\n  },\r\n  \"componentTwin\": {\r\n    \"$dtId\": \"122233\",\r\n    \"$etag\": \"4444\",\r\n    \"$metadata\": {\r\n      \"$model\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"PropertyMetadata\": {}\r\n    },\r\n    \"measurement\": 2,\r\n    \"quantity\": 1\r\n  }\r\n}";
         public static string TwinWithAllAttributesModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithallattributes;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with all attributes\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"property\",\r\n      \"schema\": \"string\"\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"intArray\",\r\n      \"schema\": {\r\n        \"@type\": \"Array\",\r\n        \"elementSchema\": \"integer\"\r\n      }\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"stringMap\",\r\n      \"schema\": {\r\n        \"@type\": \"Map\",\r\n        \"mapKey\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        },\r\n        \"mapValue\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 2,\r\n      \"minMultiplicity\": 1,\r\n      \"target\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"twinRelationship\"\r\n    },\r\n    {\r\n      \"@type\": \"Component\",\r\n      \"name\": \"simpleTwin\",\r\n      \"schema\": \"dtmi:telstra:twins:test:simpletwin;1\"\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"flag\",\r\n      \"schema\": \"boolean\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithDateTimeDTDL = "{\r\n  \"$dtId\": \"1234\",\r\n  \"$etag\": \"5678\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithdatetime;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"manufactured\": \"2021-11-17T22:23:00+10:00\"\r\n}";
