@@ -72,6 +72,14 @@ namespace Telstra.Twins.Helpers
             .Where(p => Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
             .ToList();
 
+        public static List<PropertyInfo> GetModelPropertiesFromAbstractParent(this Type t) =>
+            t.BaseType.IsAbstract && t.BaseType.Name != typeof(TwinBase).Name && !Attribute.IsDefined(t.BaseType.GetModelPropertyType(), typeof(DigitalTwinAttribute))
+                ? t.BaseType.GetProperties()
+                    .Where(p => p.DeclaringType == t.BaseType)
+                    .Where(p => Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
+                    .ToList()
+                : new();
+
         public static List<PropertyInfo> GetModelOnlyProperties(this Type t) =>
             t.GetProperties()
                 .Where(p => p.DeclaringType == t)
@@ -89,6 +97,14 @@ namespace Telstra.Twins.Helpers
             .Where(p => p.DeclaringType == t)
             .Where(p => Attribute.IsDefined(p, typeof(TwinRelationshipAttribute)))
             .ToList();
+
+        public static List<PropertyInfo> GetModelRelationshipsFromAbstractParent(this Type t) =>
+           t.BaseType.IsAbstract && t.BaseType.Name != typeof(TwinBase).Name && !Attribute.IsDefined(t.BaseType.GetModelPropertyType(), typeof(DigitalTwinAttribute))
+               ? t.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.DeclaringType == t.BaseType)
+                    .Where(p => Attribute.IsDefined(p, typeof(TwinRelationshipAttribute)))
+                    .ToList()
+               : new();
 
         public static List<PropertyInfo> GetTwinRelationships(this Type t) =>
             t.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
@@ -154,7 +170,7 @@ namespace Telstra.Twins.Helpers
             }
             else if (Attribute.IsDefined(p, typeof(JsonPropertyAttribute)))
             {
-                var customAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
+                var customAttribute = p.GetCustomAttribute<JsonPropertyAttribute>();
                 twinPropertyName = customAttribute?.PropertyName;
             }
 
@@ -172,7 +188,7 @@ namespace Telstra.Twins.Helpers
             }
             else if (Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
             {
-                var modelOnlyPropertyAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
+                var modelOnlyPropertyAttribute = p.GetCustomAttribute<JsonPropertyAttribute>();
                 modelPropertyName = modelOnlyPropertyAttribute?.PropertyName;
             }
 
@@ -187,10 +203,10 @@ namespace Telstra.Twins.Helpers
             {
                 var jsonNameAttribute = p.GetCustomAttribute<JsonPropertyNameAttribute>();
                 jsonPropertyName = jsonNameAttribute?.Name;
-            } 
+            }
             else if (Attribute.IsDefined(p, typeof(JsonPropertyAttribute)))
             {
-                var jsonNameAttribute = p.GetCustomAttribute<JsonPropertyAttribute>(); 
+                var jsonNameAttribute = p.GetCustomAttribute<JsonPropertyAttribute>();
                 jsonPropertyName = jsonNameAttribute?.PropertyName;
             }
 
