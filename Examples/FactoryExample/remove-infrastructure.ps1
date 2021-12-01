@@ -19,13 +19,8 @@ param (
 
 $ErrorActionPreference="Stop"
 
-if (-not $SubscriptionId) {
-  Write-Verbose "Using default subscription ID"
-  $SubscriptionId = (ConvertFrom-Json "$(az account show)").id
-}
-
-$AppName = 'codefirsttwins'
-$Environment = 'demo'
+$SubscriptionId = (Get-AzContext).Subscription.Id
+Write-Verbose "Removing from context subscription ID $SubscriptionId"
 
 $ResourceGroupName = "rg-$AppName-$Environment-001"
 
