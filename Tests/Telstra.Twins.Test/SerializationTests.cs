@@ -1,17 +1,13 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Azure.DigitalTwins.Core;
-using Telstra.Twins.Attributes;
 using Telstra.Twins.Core;
 using Telstra.Twins.Models;
 using Telstra.Twins.Services;
 using Xunit;
 using Xunit.Abstractions;
-using FluentAssertions;
+using System.IO;
+using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Test
 {
@@ -34,6 +30,29 @@ namespace Telstra.Twins.Test
             var model = Serializer.SerializeModel(twinType);
             JsonAssert.Equal(expectedModel, model);
 
+        }
+
+        [Theory]
+        [InlineData(typeof(Building))]
+        [InlineData(typeof(Floor))]
+        public void ShouldSerialiseModelToDTDLCustomized(Type type)
+        {
+            var model = Serializer.SerializeModel(type);
+            if (!Directory.Exists("DTDL Models"))
+            {
+                Directory.CreateDirectory("DTDL Models");
+            }
+            File.WriteAllText(Path.Combine("DTDL Models", $"{type.Name}.json"), model);
+        }
+
+        [Fact]
+        public void Building_RelationName_Should_MatchWithAttribute()
+        {
+            var model = typeof(Building).GetModelRelationships();
+            var moelRel = ModelRelationship.Create(model[0]);
+            Assert.Equal("contains", moelRel.Name);
+
+            var modelLibrary = new ModelLibrary();
         }
 
         [Theory]

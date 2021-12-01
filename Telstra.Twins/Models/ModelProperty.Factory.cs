@@ -56,12 +56,14 @@ namespace Telstra.Twins.Models
         private static object SchemaFromType(PropertyInfo info)
         {
             var propertyType = info.PropertyType;
+            var nullableType = Nullable.GetUnderlyingType(propertyType);
             if (SchemaMap.ContainsKey(propertyType))
-            {
                 return SchemaMap[propertyType];
+            else if (nullableType != null && SchemaMap.ContainsKey(nullableType))
+            {
+                return SchemaMap[nullableType];
             }
-
-            if (propertyType.IsArray)
+            else if (propertyType.IsArray)
             {
                 var schema = new Dictionary<string, string>();
                 schema.Add("@type", "Array");

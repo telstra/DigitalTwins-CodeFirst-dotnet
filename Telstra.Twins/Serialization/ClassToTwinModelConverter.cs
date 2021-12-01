@@ -178,6 +178,11 @@ namespace Telstra.Twins.Serialization
             var modelProperties = typeToAnalyze.GetModelProperties()
                 .ToList()
                 .Select(ModelProperty.Create);
+            var parentProperties = typeToAnalyze.GetModelPropertiesFromAbstractParent()
+                .ToList()
+                .Select(ModelProperty.Create);
+
+            contents.AddRange(parentProperties);
             contents.AddRange(modelProperties);
         }
 
@@ -187,6 +192,12 @@ namespace Telstra.Twins.Serialization
             var modelProperties = typeToAnalyze.GetModelRelationships()
                 .ToList()
                 .Select(ModelRelationship.Create);
+
+            var parentProperties = typeToAnalyze.GetModelRelationshipsFromAbstractParent()
+                .ToList()
+                .Select(ModelRelationship.Create);
+
+            contents.AddRange(parentProperties);
             contents.AddRange(modelProperties);
         }
 

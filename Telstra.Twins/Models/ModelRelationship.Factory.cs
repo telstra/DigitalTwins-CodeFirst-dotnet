@@ -13,6 +13,7 @@ namespace Telstra.Twins.Models
 
             return new ModelRelationship(info.Name.ToCamelCase())
             {
+                Name = attr.Name?.ToCamelCase() ?? info.Name.ToCamelCase(),
                 DisplayName = attr.DisplayName,
                 Comment = attr.Comment,
                 Description = attr.Description,
