@@ -1,47 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Telstra.Twins</RootNamespace>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.0.4</Version>
-    <Authors>Telstra ADT Team</Authors>
-    <Company>Telstra</Company>
-    <Description>Telstra Digital Twins Core</Description>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Telstra.Twins</RootNamespace>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <Version>1.0.4</Version>
+        <Authors>Telstra ADT Team</Authors>
+        <Company>Telstra</Company>
+        <Description>Telstra Digital Twins Core</Description>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Utils\TwinClassGenerator\SampleTwin.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Utils\TwinClassGenerator\SampleTwin.cs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Utils\TwinClassGenerator\SampleTwin.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Utils\TwinClassGenerator\SampleTwin.cs">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.DigitalTwins.Core" Version="1.2.2" />
-    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.6.2" />
-    <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.6.2" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.12" />
-    <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.12.7" />
-    <PackageReference Include="Microsoft.Azure.EventGrid" Version="3.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.0.34" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Polly" Version="7.2.2" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.DigitalTwins.Core" Version="1.2.2" />
+        <PackageReference Include="Azure.Messaging.EventHubs" Version="5.6.2" />
+        <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.6.2" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.12.7" />
+        <PackageReference Include="Microsoft.Azure.EventGrid" Version="3.2.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.0.34" />
+        <PackageReference Include="Polly" Version="7.2.2" />
+        <PackageReference Include="System.Reactive" Version="5.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Telstra.Twins.Common\Telstra.Twins.Common.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Telstra.Twins.Common\Telstra.Twins.Common.csproj" />
+    </ItemGroup>
 
 </Project>
