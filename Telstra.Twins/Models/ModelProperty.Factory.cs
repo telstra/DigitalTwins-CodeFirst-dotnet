@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Dynamic;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 
@@ -34,6 +33,8 @@ namespace Telstra.Twins.Models
         private static Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
         {
             { typeof(string), "string" },
+            { typeof(DateTime), "dateTime" },
+            { typeof(DateTimeOffset), "dateTime" },
             { typeof(bool), "boolean" },
             { typeof(bool?), "boolean" },
             { typeof(double), "double" },
@@ -46,8 +47,13 @@ namespace Telstra.Twins.Models
         internal static object SchemaFromType(PropertyInfo info)
         {
             var propertyType = info.PropertyType;
-            if (SchemaMap.ContainsKey(propertyType))  
+            var nullableType = Nullable.GetUnderlyingType(propertyType);
+            if (SchemaMap.ContainsKey(propertyType))
                 return SchemaMap[propertyType];
+            else if (nullableType != null && SchemaMap.ContainsKey(nullableType))
+            {
+                return SchemaMap[nullableType];
+            }
             else if (propertyType.IsArray)
             {
                 var schema = new Dictionary<string, string>();
@@ -81,7 +87,7 @@ namespace Telstra.Twins.Models
                 schema.Add("@type", "Object");
                 var fields = new List<NestedField>();
                 var fieldsInfo = propertyType.GetProperties();
-                foreach(var fieldInfo in fieldsInfo)
+                foreach (var fieldInfo in fieldsInfo)
                 {
                     fields.Add(new NestedField(fieldInfo.Name, SchemaMap.TryGetValue<Type, string>(fieldInfo.PropertyType)));
                 }
@@ -93,7 +99,7 @@ namespace Telstra.Twins.Models
 
         internal class NestedField
         {
-            public NestedField (string name, string schema)
+            public NestedField(string name, string schema)
             {
                 this.name = name;
                 this.schema = schema;
@@ -106,7 +112,7 @@ namespace Telstra.Twins.Models
 
     internal static class Extensions
     {
-        public static T TryGetValue<K,T>(this Dictionary<K,T> dict, K key)
+        public static T TryGetValue<K, T>(this Dictionary<K, T> dict, K key)
         {
             return dict.ContainsKey(key) ? dict[key] : default(T);
         }
