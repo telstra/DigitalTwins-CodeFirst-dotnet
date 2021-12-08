@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using Telstra.Twins.Attributes;
-using System;
 
 namespace Telstra.Twins.Test
 {
