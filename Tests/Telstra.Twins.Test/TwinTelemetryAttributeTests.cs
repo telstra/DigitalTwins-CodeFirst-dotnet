@@ -31,7 +31,6 @@ namespace Telstra.Twins.Test
             JsonAssert.Equal(expectedModel, model);
         }
 
-
         [Fact]
         public void SemanticTelemetryShouldSerialiseToModel()
         {

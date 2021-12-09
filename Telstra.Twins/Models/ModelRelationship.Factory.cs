@@ -11,15 +11,16 @@ namespace Telstra.Twins.Models
         {
             var attr = info.GetCustomAttribute<TwinRelationshipAttribute>();
 
-            return new ModelRelationship(info.Name.ToCamelCase())
-            {
-                DisplayName = attr.DisplayName,
-                Comment = attr.Comment,
-                Description = attr.Description,
-                MaxMultiplicity = attr.MaxMultiplicity == 0 ? null : (int?)attr.MaxMultiplicity,
-                MinMultiplicity = attr.MinMultiplicity == 0 ? null : (int?)attr.MinMultiplicity,
-                Target = info.PropertyType.GetModelPropertyType().GetDigitalTwinModelId()
-            };
+            return new ModelRelationship(info.Name.ToCamelCase(),
+                null,
+                attr!.DisplayName,
+                attr.Description,
+                attr.Comment,
+                attr.MaxMultiplicity == 0 ? null : (int?)attr.MaxMultiplicity,
+                attr.MinMultiplicity == 0 ? null : (int?)attr.MinMultiplicity,
+                info.PropertyType.GetModelPropertyType().GetDigitalTwinModelId(),
+                null
+            );
         }
     }
 }

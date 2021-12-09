@@ -36,5 +36,20 @@ namespace Telstra.Twins.Attributes
         ///     Gets or sets a value to manually override the generated schema for the property.
         /// </summary>
         public string? Schema { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the semantic type of the property.
+        /// </summary>
+        public string? SemanticType { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the units of the semantic property.
+        /// </summary>
+        public string? Unit { get; set; }
+
+        /// <summary>
+        ///     Gets or sets whether the property is writable. The default is false.
+        /// </summary>
+        public bool Writable { get; set; }
     }
 }
