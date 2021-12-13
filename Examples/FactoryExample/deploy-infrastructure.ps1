@@ -1,10 +1,55 @@
 #!/usr/bin/env pwsh
+
+<#
+.SYNOPSIS
+  Deploy the Azure infrastructure for the project. 
+
+.NOTES
+
+  Running these scripts requires the following to be installed:
+  * PowerShell, https://github.com/PowerShell/PowerShell
+  * Azure PowerShell module, https://docs.microsoft.com/en-us/powershell/azure/install-az-ps
+  * Azure Digital Twins module (preview installed separately)
+
+  You also need to connect to Azure (log in), and set the desired subscripition context.
+
+  Follow standard naming conventions from Azure Cloud Adoption Framework, 
+  with an additional organisation or subscription identifier (after app name) in global names 
+  to make them unique.
+  https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+
+  Follow standard tagging conventions from  Azure Cloud Adoption Framework.
+  https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
+
+.EXAMPLE
+
+  Install-Module -Name Az -Scope CurrentUser -Force
+  Install-Module -Name Az.DigitalTwins -Scope CurrentUser -Force
+  Register-AzResourceProvider -ProviderNamespace Microsoft.DigitalTwins
+  Connect-AzAccount
+  Set-AzContext -SubscriptionId $SubscriptionId
+  $VerbosePreference = 'Continue'
+  ./deploy-infrastructure.ps1
+#>
 [CmdletBinding()]
 param (
-    [string]$AppName = 'codefirsttwins',
-    [string]$Environment = 'demo',
-    [string]$Location = 'australiaeast'
+    ## Number of initial scripts to skip (if they have already been run)
+    [int]$Skip = 0,
+    ## Deployment environment, e.g. Prod, Dev, QA, Stage, Test.
+    [string]$Environment = $ENV:DEPLOY_ENVIRONMENT ?? 'Dev',
+    ## The Azure region where the resource is deployed.
+    [string]$Location = $ENV:DEPLOY_LOCATION ?? 'australiaeast',
+    ## Identifier for the organisation (or subscription) to make global names unique.
+    [string]$OrgId = $ENV:DEPLOY_ORGID ?? "0x$((Get-AzContext).Subscription.Id.Substring(0,4))"
 )
+
+# Following standard naming conventions from Azure Cloud Adoption Framework
+# https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+# With an additional organisation or subscription identifier (after app name) in global names to make them unique 
+
+# Following standard tagging conventions from  Azure Cloud Adoption Framework
+# https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
+
 
 # Pre-requisites:
 #
@@ -29,32 +74,10 @@ $ErrorActionPreference="Stop"
 $SubscriptionId = (Get-AzContext).Subscription.Id
 Write-Verbose "Using context subscription ID $SubscriptionId"
 
-# Following standard naming conventions from Azure Cloud Adoption Framework
-# https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+$scriptItems = Get-ChildItem "$PSScriptRoot/infrastructure" -Filter '*.ps1' `
+  | Sort-Object -Property Name `
+  | Select-Object -Skip $Skip
 
-# Include an subscription or organisation identifier (after app name) in global names to make them unique 
-$OrgId = "0x$($SubscriptionId.Substring(0,4))"
+$scriptItems | ForEach-Object { Write-Verbose "Running $($_.Name)"; & $_.FullName; }
 
-$ResourceGroupName = "rg-$AppName-$Environment-001"
-$DigitalTwinsName = "dt-$AppName-$OrgId-$Environment"
-$IotHubName = "iot-$AppName-$OrgId-$Environment"
-
-# Following standard tagging conventions from  Azure Cloud Adoption Framework
-# https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
-
-$Tag = @{ WorkloadName = 'codefirsttwins'; DataClassification = 'Non-business'; Criticality = 'Low';
-  BusinessUnit = 'Demo'; ApplicationName = $AppName; Env = $Environment }
-
-# Create
-
-New-AzResourceGroup -Name $ResourceGroupName -Location $Location -Tag $Tag -Force
-
-New-AzDigitalTwinsInstance -ResourceGroupName $ResourceGroupName -ResourceName $DigitalTwinsName -Location $Location -Tag $Tag
-
-New-AzIotHub -ResourceGroupName $ResourceGroupName -Name $IotHubName -SkuName S1 -Units 1 -Location $Location -Tag $Tag
-
-# Output
-
-(Get-AzDigitalTwinsInstance -ResourceGroupName $ResourceGroupName -ResourceName $DigitalTwinsName).HostName
-(Get-AzIotHub $ResourceGroupName).Properties.HostName
-
+Write-Verbose "Deployment Complete"
