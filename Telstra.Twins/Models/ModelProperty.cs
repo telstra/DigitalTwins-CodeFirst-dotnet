@@ -1,61 +1,28 @@
-﻿using System.Text.Json.Serialization;
+﻿#nullable enable
+
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Telstra.Twins.Serialization;
 
 namespace Telstra.Twins.Models
 {
-    public partial class ModelProperty : Content
+    public partial class ModelProperty : SemanticContent
     {
-        public string Comment { get; set; }
-        public string Description { get; set; }
-        public string DisplayName { get; set; }
-        public string Id { get; set; }
+        // TODO: Split Property and Telemetry
+        
+        private const string TypeProperty = "Property";
+        private const string TypeTelemetry = "Telemetry";
 
-        [System.Text.Json.Serialization.JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
-        public string SemanticType { get; set; }
-
-        [JsonProperty("@type", Order = -3)]
-        [JsonPropertyName("@type")]
-        public override object Type
+        private ModelProperty(bool isTelemetry, string name, object schema, string? id, string? displayName,
+            string? description, string? comment, string? semanticType, string? unit, bool? writable)
+            : base(isTelemetry ? TypeTelemetry : TypeProperty, name, schema, id, displayName, description,
+                comment, semanticType, unit)
         {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(SemanticType))
-                    return BaseType;
-                return new[] { BaseType, SemanticType };
-            }
+            Writable = writable;
         }
 
-        [JsonProperty("unit")]
-        [JsonPropertyName("unit")]
-        public string Unit { get; set; }
-
-        public bool? Writable { get; set; }
-
-        public ModelProperty(string name,
-            string schema,
-            string semanticType = null,
-            string displayName = null,
-            string description = null,
-            string id = null,
-            string comment = null,
-            string unit = null,
-            bool? writable = null) : base("Property")
-        {
-            this.SemanticType = semanticType;
-            this.DisplayName = displayName;
-            this.Description = description;
-            this.Id = id;
-            this.Comment = comment;
-            this.Unit = unit;
-            this.Writable = writable;
-            this.Name = name;
-            this.Schema = schema;
-        }
-
-        public ModelProperty(): base("Property")
-        {
-        }
+        [JsonProperty("writable")]
+        [JsonPropertyName("writable")]
+        public bool? Writable { get; }
     }
 }
