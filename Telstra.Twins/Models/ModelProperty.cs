@@ -1,42 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿#nullable enable
+
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Telstra.Twins.Serialization;
 
 namespace Telstra.Twins.Models
 {
-    public partial class ModelProperty : Content
+    public partial class ModelProperty : SemanticContent
     {
-        public string SemanticType { get; set; }
-        public string DisplayName { get; set; }
-        public string Description { get; set; }
-        public string Id { get; set; }
-        public string Comment { get; set; }
-        public string Unit { get; set; }
-        public bool? Writable { get; set; }
+        // TODO: Split Property and Telemetry
+        
+        private const string TypeProperty = "Property";
+        private const string TypeTelemetry = "Telemetry";
 
-        public ModelProperty(string name,
-            string schema,
-            string semanticType = null,
-            string displayName = null,
-            string description = null,
-            string id = null,
-            string comment = null,
-            string unit = null,
-            bool? writable = null) : this()
+        private ModelProperty(bool isTelemetry, string name, object schema, string? id, string? displayName,
+            string? description, string? comment, string? semanticType, string? unit, bool? writable)
+            : base(isTelemetry ? TypeTelemetry : TypeProperty, name, schema, id, displayName, description,
+                comment, semanticType, unit)
         {
-            this.SemanticType = semanticType;
-            this.DisplayName = displayName;
-            this.Description = description;
-            this.Id = id;
-            this.Comment = comment;
-            this.Unit = unit;
-            this.Writable = writable;
-            this.Name = name;
-            this.Schema = schema;
+            Writable = writable;
         }
 
-        public ModelProperty()
-        {
-            this.Type = "Property";
-        }
+        [JsonProperty("writable")]
+        [JsonPropertyName("writable")]
+        public bool? Writable { get; }
     }
 }

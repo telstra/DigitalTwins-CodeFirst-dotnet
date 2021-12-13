@@ -1,0 +1,142 @@
+@startuml
+title Class diagram for DTDLv2
+footer https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md
+
+hide abstract circle
+hide abstract methods
+hide class circle
+hide class methods
+hide interface circle
+hide interface methods
+
+DtdlBase <|-- DtdlTypeBase
+DtdlTypeBase <|-- Content
+Content <|-- SemanticContent
+DtdlTypeBase <|-- ComplexSchema
+DtdlBase <|-- DtdlElement
+
+DtdlTypeBase <|-- Interface
+SemanticContent <|-- Telemetry
+SemanticContent <|-- Property
+Content <|-- Component
+Content <|-- Command
+Content <|-- Relationship
+ComplexSchema <|-- Array
+ComplexSchema <|-- Enum
+ComplexSchema <|-- Map
+ComplexSchema <|-- Object
+DtdlElement <|-- SchemaElement
+DtdlElement <|-- EnumValue
+SchemaElement <|-- CommandPayload
+SchemaElement <|-- MapKey
+SchemaElement <|-- MapValue
+SchemaElement <|-- Field
+
+interface Schema <<interface>>
+
+Schema <|.. ComplexSchema
+Schema <|.. PrimitiveSchema
+
+class PrimitiveSchema {
+  {static} boolean
+  {static} date
+  {static} dateTime
+  {static} double
+  {static} duration
+  {static} float
+  {static} integer
+  {static} long
+  {static} string
+  {static} time
+}
+
+abstract DtdlBase <<abstract>> {
+  @id: IRI
+  comment
+  description
+  displayName
+}
+
+abstract DtdlTypeBase <<abstract>> {
+  @type: IRI <<required>>
+  --
+  BaseType
+}
+
+abstract Content <<abstract>> {
+  name <<required>>
+}
+
+abstract SemanticContent <<abstract>> {
+  schema: Schema <<required>>
+  unit: Unit
+  --
+  SemanticType
+}
+
+abstract ComplexSchema <<abstract>> {
+}
+
+abstract DtdlElement <<abstract>> {
+  name <<required>>
+}
+
+class Interface {
+  @id: DTMI <<required>> 
+  @context: IRI <<required>> 
+  contents: Content[]
+  extends: DTMI<Interface>[]
+  schemas: Schema[]
+}
+
+class Telemetry
+
+class Property {
+  writeable
+}
+
+class Component {
+  schema: Schema <<required>>
+}
+
+class Command {
+  commandType <<deprecated>>
+  request: CommandPayload
+  response: CommandPayload
+}
+
+class Relationship {
+  maxMultiplicity
+  minMultiplicity
+  properties: Property[]
+  target: DTMI<Interface>
+  writeable
+}
+
+class Array {
+  elementSchema: Schema <<required>>
+}
+
+class Enum {
+  enumValues: EnumValue[] <<required>>
+  valueSchema <<required>>
+}
+
+class Map {
+  mapKey: MapKey <<required>>
+  mapValue: MapValue <<required>>
+}
+
+class Object {
+  fields: Field[] <<required>>
+}
+
+abstract SchemaElement <<abstract>> {
+  schema <<required>>
+}
+
+class EnumValue {
+  enumValue <<required>>
+}
+
+@enduml
