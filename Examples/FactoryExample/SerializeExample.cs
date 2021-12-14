@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Azure;
 using FactoryExample.Devices;
 using FactoryExample.Models;
 using FactoryExample.Schema;
-using Microsoft.Extensions.Configuration;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 
@@ -79,6 +75,5 @@ namespace FactoryExample
             Console.WriteLine(twin2Dtdl);
             Console.WriteLine();
         }
-
     }
 }

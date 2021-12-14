@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azure;
-using FactoryExample.Devices;
-using FactoryExample.Models;
-using FactoryExample.Schema;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.DigitalTwins.Parser;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 
@@ -22,19 +19,19 @@ namespace FactoryExample
 
             try
             {
-                var parser = new Microsoft.Azure.DigitalTwins.Parser.ModelParser();
+                var parser = new ModelParser();
                 var entityInfos = await parser.ParseAsync(models);
-                Console.WriteLine($"PARSE SUCCESS:");
+                Console.WriteLine("PARSE SUCCESS:");
                 foreach (var kvp in entityInfos)
                 {
                     Console.WriteLine(
                         $"[{kvp.Key}] = {kvp.Value.EntityKind} {kvp.Value.Id} ({kvp.Value.DisplayName.FirstOrDefault().Value})");
                 }
             }
-            catch (Microsoft.Azure.DigitalTwins.Parser.ParsingException ex)
+            catch (ParsingException ex)
             {
                 Console.WriteLine($"PARSE FAILED: {ex.Message}");
-                Console.WriteLine($"ERRORS:");
+                Console.WriteLine("ERRORS:");
                 var count = 0;
                 foreach (var error in ex.Errors)
                 {

@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Azure;
 using FactoryExample.Devices;
 using FactoryExample.Models;
-using FactoryExample.Schema;
 using Microsoft.Extensions.Configuration;
-using Telstra.Twins.Core;
-using Telstra.Twins.Services;
 
 namespace FactoryExample
 {
-    class Program
+    internal class Program
     {
-        public static Type[] ModelTypes = new[]
+        public static Type[] ModelTypes =
         {
-            typeof(Factory), typeof(FactoryFloor), typeof(ProductionLine),
-            typeof(ProductionStep), typeof(ProductionStepGrinding)
+            typeof(Factory), typeof(FactoryFloor), typeof(ProductionLine), typeof(ProductionStep),
+            typeof(ProductionStepGrinding)
         };
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Console.WriteLine("Digital Twin Code First Factory Example");
 
@@ -42,7 +37,7 @@ namespace FactoryExample
                         return;
                 }
             }
-            
+
             var check = configuration.GetValue<string>("parse");
             if (!string.IsNullOrWhiteSpace(check))
             {
@@ -67,8 +62,8 @@ namespace FactoryExample
 
             ShowHelp();
         }
-        
-        static void ShowHelp()
+
+        private static void ShowHelp()
         {
             Console.WriteLine(" --serialize model : shows serialized model examples");
             Console.WriteLine(" --serialize example : shows serialized twin examples");
