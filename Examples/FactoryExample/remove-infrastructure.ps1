@@ -1,27 +1,24 @@
+#!/usr/bin/env pwsh
+
 [CmdletBinding()]
 param (
-    [string]$SubscriptionId = $null,
-    [string]$AppName = 'codefirsttwins',
-    [string]$Environment = 'demo'
+    ## Number of initial scripts to skip (if they have already been run)
+    [int]$Skip = 0,
+    ## Deployment environment, e.g. Prod, Dev, QA, Stage, Test.
+    [string]$Environment = $ENV:DEPLOY_ENVIRONMENT ?? 'Dev',
+    ## The Azure region where the resource is deployed.
+    [string]$Location = $ENV:DEPLOY_LOCATION ?? 'australiaeast',
+    ## Identifier for the organisation (or subscription) to make global names unique.
+    [string]$OrgId = $ENV:DEPLOY_ORGID ?? "0x$((Get-AzContext).Subscription.Id.Substring(0,4))"
 )
-
-# Pre-requisites:
-#
-# Running these scripts requires the following to be installed:
-# * PowerShell, https://github.com/PowerShell/PowerShell
-# * Azure CLI, https://docs.microsoft.com/en-us/cli/azure
-#
-# You also need to run `az login` to authenticate
-#
-# To see messages, set verbose preference before running:
-#   $VerbosePreference = 'Continue'
-#   ./deploy-infrastructure.ps1
 
 $ErrorActionPreference="Stop"
 
 $SubscriptionId = (Get-AzContext).Subscription.Id
 Write-Verbose "Removing from context subscription ID $SubscriptionId"
 
-$ResourceGroupName = "rg-$AppName-$Environment-001"
+$appName = 'codefirsttwins'
 
-Remove-AzResourceGroup -Name $ResourceGroupName
+$rgName = "rg-$appName-$Environment-001".ToLowerInvariant()
+
+Remove-AzResourceGroup -Name $rgName

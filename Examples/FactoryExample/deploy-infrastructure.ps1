@@ -78,6 +78,9 @@ $scriptItems = Get-ChildItem "$PSScriptRoot/infrastructure" -Filter '*.ps1' `
   | Sort-Object -Property Name `
   | Select-Object -Skip $Skip
 
-$scriptItems | ForEach-Object { Write-Verbose "Running $($_.Name)"; & $_.FullName; }
+$scriptItems | ForEach-Object { 
+  Write-Verbose "Running $($_.Name)"
+  & $_.FullName -Environment $Environment -Location $Location -OrgId $OrgId
+}
 
 Write-Verbose "Deployment Complete"
