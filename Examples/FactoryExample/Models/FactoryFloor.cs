@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using MediatR;
 using Telstra.Twins;
 using Telstra.Twins.Attributes;
+using Telstra.Twins.Semantics;
 
 namespace FactoryExample.Models
 {
@@ -9,16 +11,17 @@ namespace FactoryExample.Models
     {
         [TwinProperty] public double? ComfortIndex { get; set; }
 
-        [TwinProperty] public string? FloorId { get; set; }
+        [TwinProperty(Writable = true)] public string? FloorId { get; set; }
 
-        [TwinProperty] public string? FloorName { get; set; }
+        // FloorHasRooms
+        // FloorHasZones
+        
+        [TwinProperty(Writable = true)] public string? FloorName { get; set; }
 
-        //[TwinRelationship(DisplayName = "Runs Production Lines")]
-        [TwinRelationship(MaxMultiplicity = 500)]
+        [TwinRelationship(DisplayName = "Runs Production Lines")]
         public IList<ProductionLine> RunsLines { get; } = new List<ProductionLine>();
 
-        //[TwinTelemetry(Unit = "degreeCelsius", SemanticType = "Temperature")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius, Writable = true)]
         public double? Temperature { get; set; }
     }
 }

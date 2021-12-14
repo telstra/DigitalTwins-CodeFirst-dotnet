@@ -1,4 +1,5 @@
 ﻿using Telstra.Twins.Attributes;
+using Telstra.Twins.Semantics;
 
 namespace FactoryExample.Devices
 {
@@ -6,24 +7,19 @@ namespace FactoryExample.Devices
         ExtendsModelId = "dtmi:factoryexample:devices:productionstep;1")]
     public class ProductionStepGrinding : ProductionStep
     {
-        //[TwinTelemetry(Unit = "degreeCelsius", SemanticType = "Temperature")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius, Writable = true)]
         public double? ChassisTemperature { get; set; }
 
-        //[TwinTelemetry(Unit = "newton", SemanticType = "Force")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.Force, Unit = ForceUnit.Newton)]
         public double? Force { get; set; }
 
-        //[TwinTelemetry(Unit = "minute", SemanticType = "TimeSpan")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.TimeSpan, Unit = TimeUnit.Minute)]
         public int? GrindingTime { get; set; }
 
-        //[TwinTelemetry(Unit = "kilowatt", SemanticType = "Power")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.Power, Unit = PowerUnit.Kilowatt)]
         public double? PowerUsage { get; set; }
 
-        //[TwinTelemetry(Unit = "hertz", SemanticType = "Frequency")]
-        [TwinTelemetry]
+        [TwinProperty(SemanticType = SemanticType.Frequency, Unit = FrequencyUnit.Hertz)]
         public double? Vibration { get; set; }
     }
 }

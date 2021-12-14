@@ -13,16 +13,21 @@ namespace FactoryExample.Models
 
         [TwinProperty] public string? FactoryId { get; set; }
 
-        [TwinProperty] public string? FactoryName { get; set; }
+        [TwinProperty(Writable = true)] public string? FactoryName { get; set; }
         
-        //[TwinRelationship(DisplayName = "Has Floors")]
-        [TwinRelationship(MaxMultiplicity = 500)]
+        [TwinRelationship(DisplayName = "Has Floors")]
         public IList<FactoryFloor> Floors { get; } = new List<FactoryFloor>();
 
         [TwinProperty] public GeoCord? GeoLocation { get; set; }
 
-        //[TwinProperty] public DateTimeOffset LastSupplyDate { get; set; }
+        [TwinProperty] public DateTimeOffset LastSupplyDate { get; set; }
+        
+        // ServesRetailer
+        // SuppliedBy
+        // TransportationBy
 
-        [TwinProperty] public string? ZipCode { get; set; }
+        [TwinProperty(Writable = true)] public string? Tags { get; set; }
+
+        [TwinProperty(Writable = true)] public string? ZipCode { get; set; }
     }
 }
