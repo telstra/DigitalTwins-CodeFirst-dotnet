@@ -8,9 +8,9 @@ namespace FactoryExample.Devices
     public class ProductionStep : TwinBase
     {
         // ContainsEquipment
-        
+
         [TwinProperty] public bool FinalStep { get; set; }
-        
+
         // HasConnectedDevices
 
         //[TwinProperty] public ProductionStepStatus OperationStatus { get; set; }

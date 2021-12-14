@@ -7,7 +7,8 @@ namespace FactoryExample.Devices
         ExtendsModelId = "dtmi:factoryexample:devices:productionstep;1")]
     public class ProductionStepGrinding : ProductionStep
     {
-        [TwinProperty(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius, Writable = true)]
+        [TwinProperty(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius,
+            Writable = true)]
         public double? ChassisTemperature { get; set; }
 
         [TwinProperty(SemanticType = SemanticType.Force, Unit = ForceUnit.Newton)]

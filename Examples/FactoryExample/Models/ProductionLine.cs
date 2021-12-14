@@ -9,7 +9,7 @@ namespace FactoryExample.Models
     public class ProductionLine : TwinBase
     {
         // ContainsEquipment
-        
+
         [TwinProperty(Writable = true)] public string? CurrentProductId { get; set; }
 
         [TwinProperty(Writable = true)] public string? LineId { get; set; }
