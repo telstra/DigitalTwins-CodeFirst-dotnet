@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Azure;
 using Microsoft.Azure.DigitalTwins.Parser;
@@ -10,7 +11,7 @@ namespace FactoryExample
 {
     public static class ParseExample
     {
-        public static async Task ParseModels()
+        public static async Task ParseModelsAsync(CancellationToken cancellationToken)
         {
             var modelLibrary = new ModelLibrary();
             var serializer = new DigitalTwinSerializer(modelLibrary);
