@@ -1,7 +1,4 @@
 ﻿using System;
-using FactoryExample.Devices;
-using FactoryExample.Models;
-using FactoryExample.Schema;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 

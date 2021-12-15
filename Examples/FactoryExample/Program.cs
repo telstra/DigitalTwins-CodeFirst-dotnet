@@ -8,15 +8,60 @@ using Microsoft.Extensions.Configuration;
 
 namespace FactoryExample
 {
-    internal class Program
+    public static class Program
     {
-        public static Type[] ModelTypes =
+        public static readonly Type[] ModelTypes =
         {
             typeof(Factory), typeof(FactoryFloor), typeof(ProductionLine), typeof(ProductionStep),
             typeof(ProductionStepGrinding)
         };
 
-        private static async Task Main(string[] args)
+        public static Factory CreateFactoryTwin()
+        {
+            var productionStepGrinding = new ProductionStepGrinding
+            {
+                ChassisTemperature = 50,
+                FinalStep = false,
+                Force = 8.0,
+                GrindingTime = 30,
+                //OperationStatus = ProductionStepStatus.Online,
+                PowerUsage = 100,
+                //StartTime = new DateTimeOffset(2021, 11, 17, 19, 57, 0, TimeSpan.FromHours(10)),
+                StepId = "step1",
+                StepName = "GrindingStep"
+            };
+
+            var productionLine = new ProductionLine
+            {
+                CurrentProductId = "production1",
+                LineId = "line1",
+                LineName = "ProductionLine",
+                //LineOperationStatus = ProductionLineStatus.Online,
+                ProductBatchNumber = 5
+            };
+            productionLine.RunsSteps.Add(productionStepGrinding);
+
+            var factoryFloor = new FactoryFloor
+            {
+                ComfortIndex = 0.8, FloorId = "floor1", FloorName = "FactoryFloor", Temperature = 23
+            };
+            factoryFloor.RunsLines.Add(productionLine);
+
+            var factory = new Factory
+            {
+                Country = "AU",
+                FactoryId = "factory1",
+                FactoryName = "Chocolate Factory",
+                GeoLocation = new GeoCord { Latitude = -27.4705, Longitude = 153.026 },
+                LastSupplyDate = new DateTimeOffset(2021, 11, 17, 18, 37, 0, TimeSpan.FromHours(10)),
+                Tags = String.Empty,
+                ZipCode = "4000"
+            };
+            factory.Floors.Add(factoryFloor);
+            return factory;
+        }
+
+        public static async Task Main(string[] args)
         {
             Console.WriteLine("Digital Twin Code First Factory Example");
 
@@ -68,54 +113,6 @@ namespace FactoryExample
             }
 
             ShowHelp();
-        }
-
-        public static Factory CreateFactoryTwin()
-        {
-            var productionStepGrinding = new ProductionStepGrinding
-            {
-                ChassisTemperature = 50,
-                FinalStep = false,
-                Force = 8.0,
-                GrindingTime = 30,
-                //OperationStatus = ProductionStepStatus.Online,
-                PowerUsage = 100,
-                //StartTime = new DateTimeOffset(2021, 11, 17, 19, 57, 0, TimeSpan.FromHours(10)),
-                StepId = "step1",
-                StepName = "GrindingStep"
-            };
-
-            var productionLine = new ProductionLine
-            {
-                CurrentProductId = "production1",
-                LineId = "line1",
-                LineName = "ProductionLine",
-                //LineOperationStatus = ProductionLineStatus.Online,
-                ProductBatchNumber = 5
-            };
-            productionLine.RunsSteps.Add(productionStepGrinding);
-
-            var factoryFloor = new FactoryFloor
-            {
-                ComfortIndex = 0.8,
-                FloorId = "floor1", 
-                FloorName = "FactoryFloor", 
-                Temperature = 23
-            };
-            factoryFloor.RunsLines.Add(productionLine);
-
-            var factory = new Factory
-            {
-                Country = "AU",
-                FactoryId = "factory1",
-                FactoryName = "Chocolate Factory",
-                GeoLocation = new GeoCord { Latitude = -27.4705, Longitude = 153.026 },
-                LastSupplyDate = new DateTimeOffset(2021, 11, 17, 18, 37, 0, TimeSpan.FromHours(10)),
-                Tags = String.Empty,
-                ZipCode = "4000"
-            };
-            factory.Floors.Add(factoryFloor);
-            return factory;
         }
 
         private static void ShowHelp()

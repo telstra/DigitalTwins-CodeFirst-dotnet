@@ -1,19 +1,16 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
 using Azure.DigitalTwins.Core;
 using Azure.Identity;
-using Microsoft.Azure.DigitalTwins.Parser;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 
 namespace FactoryExample
 {
-    public class CreateExample
+    public static class CreateExample
     {
         //public static async Task CreateModels(string tenantId, string clientId, string clientSecret, string adtEndpoint)
         public static async Task CreateModelsAsync(string adtEndpoint, CancellationToken cancellationToken)
@@ -31,7 +28,8 @@ namespace FactoryExample
                 Console.WriteLine("CREATE MODELS SUCCESS");
                 foreach (var modelData in response.Value)
                 {
-                    Console.WriteLine($"{modelData.Id}: {modelData.LanguageDisplayNames.FirstOrDefault().Value}");
+                    Console.WriteLine(
+                        $"{modelData.Id}: {modelData.LanguageDisplayNames.FirstOrDefault().Value}");
                 }
             }
             catch (Exception ex)
@@ -55,8 +53,11 @@ namespace FactoryExample
                 // Twin 1 
                 var dtdl = serializer.SerializeTwin(factory);
                 var basicDigitalTwin = JsonSerializer.Deserialize<BasicDigitalTwin>(dtdl);
-                Response<BasicDigitalTwin> response = await client.CreateOrReplaceDigitalTwinAsync<BasicDigitalTwin>(factory.FactoryId, basicDigitalTwin, null, cancellationToken);
-                Console.WriteLine("CREATE MODELS SUCCESS: Id={0}, ETag={1}", response.Value.Id, response.Value.ETag);
+                var response =
+                    await client.CreateOrReplaceDigitalTwinAsync(factory.FactoryId,
+                        basicDigitalTwin!, null, cancellationToken);
+                Console.WriteLine("CREATE MODELS SUCCESS: Id={0}, ETag={1}", response.Value.Id,
+                    response.Value.ETag);
             }
             catch (Exception ex)
             {
@@ -65,7 +66,7 @@ namespace FactoryExample
         }
 
         private static DigitalTwinsClient GetDigitalTwinsClient(string adtEndpoint)
-        //private static DigitalTwinsClient GetDigitalTwinsClient(string tenantId, string clientId, string clientSecret, string adtEndpoint)
+            //private static DigitalTwinsClient GetDigitalTwinsClient(string tenantId, string clientId, string clientSecret, string adtEndpoint)
         {
             // These environment variables are necessary for DefaultAzureCredential to use application Id and client secret to login.
             //Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", clientSecret);
@@ -74,7 +75,7 @@ namespace FactoryExample
 
             // DefaultAzureCredential supports different authentication mechanisms and determines the appropriate credential type based of the environment it is executing in.
             // It attempts to use multiple credential types in an order until it finds a working credential.
-            var tokenCredential = new DefaultAzureCredential(includeInteractiveCredentials: true);
+            var tokenCredential = new DefaultAzureCredential(true);
 
             var client = new DigitalTwinsClient(
                 new Uri(adtEndpoint),
