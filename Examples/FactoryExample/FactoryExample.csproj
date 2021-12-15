@@ -10,4 +10,8 @@
       <ProjectReference Include="..\..\Telstra.Twins\Telstra.Twins.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    </ItemGroup>
+
 </Project>

@@ -55,7 +55,9 @@ namespace FactoryExample
                 switch (create.ToLowerInvariant())
                 {
                     case "model":
+                        var adtEndpoint = configuration.GetValue<string>("endpoint");
                         await ParseExample.ParseModels();
+                        await CreateExample.CreateModels(adtEndpoint);
                         return;
                 }
             }
@@ -68,7 +70,7 @@ namespace FactoryExample
             Console.WriteLine(" --serialize model : shows serialized model examples");
             Console.WriteLine(" --serialize example : shows serialized twin examples");
             Console.WriteLine(" --parse model : parse and validate the example model");
-            Console.WriteLine(" --create model <connection>: parse and upload the example model");
+            Console.WriteLine(" --create model --endpoint <dtEndpoint>: parse and upload the example model");
         }
     }
 }
