@@ -30,8 +30,21 @@ script.
   ./deploy-infrastructure.ps1
 ```
 
-Running the example
--------------------
+Digital Twins Explorer
+----------------------
+
+After you have created the infrastructure, open `https://portal.azure.com/` and go to the resource group.
+
+Open the Azure Digital Twins resource.
+
+Copy the Host name, and then open the Azure Digital Twins Explorer (preview).
+
+For the Azure Digital Twins URL, use `https://<digital twins host name>`, with the Host name copied from above.
+
+The explorer should start out empty (see below).
+
+Running basic checks
+--------------------
 
 To see the example serialized model:
 
@@ -51,7 +64,10 @@ To run parse and validate the model with `Microsoft.Azure.DigitalTwins.Parser`:
 dotnet run -- --parse model
 ```
 
-To upload the model to Azure:
+Running the example to create models and twins
+----------------------------------------------
+
+To upload the models to Azure:
 
 ``` pwsh
 $rgName = "rg-codefirsttwins-dev-001"
@@ -60,6 +76,16 @@ $hostName = (Get-AzDigitalTwinsInstance -ResourceGroupName $rgName -ResourceName
 dotnet run -- --create model --endpoint "https://$hostName"
 ```
 
+After this, if you refresh the Models in Digital Twins Explorer, you will see the uploaded models. 
+
+You then need to upload the Twin instances:
+
+``` pwsh
+dotnet run -- --create twin --endpoint "https://$hostName"
+```
+
+To see the Twin instances, ensure the query explorer has the default query `SELECT * FROM digitaltwins`,
+and then click Run Query. The twin instances should appear in the Twins list and Twin Graph.
 
 Cleanup
 -------
@@ -67,8 +93,7 @@ Cleanup
 After running the example, you can clean up the Azure resources (to save money).
 
 ``` pwsh
-  $VerbosePreference = 'Continue'
-  ./remove-infrastructure.ps1
+./remove-infrastructure.ps1
 ```
 
 
