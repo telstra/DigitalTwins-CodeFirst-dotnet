@@ -58,7 +58,7 @@ namespace FactoryExample
                         factoryDigitalTwin!, null, cancellationToken);
                 Console.WriteLine("CREATE TWIN SUCCESS: Id={0}, ETag={1}", factoryResponse.Value.Id,
                     factoryResponse.Value.ETag);
-                
+
                 // Twin 2
                 var floor0Dtdl = serializer.SerializeTwin(factory.Floors[0]);
                 var floor0DigitalTwin = JsonSerializer.Deserialize<BasicDigitalTwin>(floor0Dtdl);
@@ -67,9 +67,9 @@ namespace FactoryExample
                         floor0DigitalTwin!, null, cancellationToken);
                 Console.WriteLine("CREATE TWIN SUCCESS: Id={0}, ETag={1}", floor0Response.Value.Id,
                     floor0Response.Value.ETag);
-                
+
                 // Relationship
-                var floor0Relationship = new BasicRelationship()
+                var floor0Relationship = new BasicRelationship
                 {
                     Id = $"{factory.FactoryId}_{factory.Floors[0].FloorId}",
                     Name = "floors",
@@ -79,7 +79,8 @@ namespace FactoryExample
                 var floor0RelationshipResponse =
                     await client.CreateOrReplaceRelationshipAsync(factory.FactoryId, floor0Relationship.Id,
                         floor0Relationship, null, cancellationToken);
-                Console.WriteLine("CREATE RELATIONSHIP SUCCESS: Id={0}, ETag={1}", floor0RelationshipResponse.Value.Id,
+                Console.WriteLine("CREATE RELATIONSHIP SUCCESS: Id={0}, ETag={1}",
+                    floor0RelationshipResponse.Value.Id,
                     floor0RelationshipResponse.Value.ETag);
             }
             catch (Exception ex)
