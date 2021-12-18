@@ -78,6 +78,8 @@ dotnet run -- --create model --endpoint "https://$hostName"
 
 After this, if you refresh the Models in Digital Twins Explorer, you will see the uploaded models. 
 
+![Explorer model graph](images/model-graph-example.png)
+
 You then need to upload the Twin instances:
 
 ``` pwsh
@@ -86,6 +88,8 @@ dotnet run -- --create twin --endpoint "https://$hostName"
 
 To see the Twin instances, ensure the query explorer has the default query `SELECT * FROM digitaltwins`,
 and then click Run Query. The twin instances should appear in the Twins list and Twin Graph.
+
+![Explorer twins graph](images/twins-graph-example.png)
 
 Cleanup
 -------
