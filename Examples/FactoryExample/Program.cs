@@ -13,12 +13,23 @@ namespace FactoryExample
         public static readonly Type[] ModelTypes =
         {
             typeof(Factory), typeof(FactoryFloor), typeof(ProductionLine), typeof(ProductionStep),
-            typeof(ProductionStepGrinding)
+            typeof(ProductionStepGrinding), typeof(ProductionStepFanning), typeof(ProductionStepMoulding)
         };
 
         public static Factory CreateFactoryTwin()
         {
-            var productionStepGrinding = new ProductionStepGrinding
+            var production1Step3Moulding = new ProductionStepMoulding
+            {
+                ChassisTemperature = 50,
+                FinalStep = true,
+                //OperationStatus = ProductionStepStatus.Online,
+                PowerUsage = 100,
+                StartTime = DateTimeOffset.UnixEpoch,
+                StepId = "line1.step3",
+                StepName = "Moulding Step"
+            };
+            
+            var production1Step2Grinding = new ProductionStepGrinding
             {
                 ChassisTemperature = 50,
                 FinalStep = false,
@@ -26,28 +37,44 @@ namespace FactoryExample
                 GrindingTime = 30,
                 //OperationStatus = ProductionStepStatus.Online,
                 PowerUsage = 100,
-                //StartTime = new DateTimeOffset(2021, 11, 17, 19, 57, 0, TimeSpan.FromHours(10)),
-                StepId = "step1",
-                StepName = "GrindingStep"
+                StartTime = DateTimeOffset.UnixEpoch,
+                StepId = "line1.step2",
+                StepName = "Grinding Step",
+                StepLink = production1Step3Moulding
             };
 
-            var productionLine = new ProductionLine
+            var production1Step1Fanning = new ProductionStepFanning()
             {
-                CurrentProductId = "production1",
+                ChassisTemperature = 50,
+                FinalStep = false,
+                FanSpeed = 0.5,
+                //OperationStatus = ProductionStepStatus.Online,
+                PowerUsage = 100,
+                StartTime = DateTimeOffset.UnixEpoch,
+                StepId = "line1.step1",
+                StepName = "Fanning Step",
+                StepLink = production1Step2Grinding
+            };
+
+            var productionLine1 = new ProductionLine
+            {
+                CurrentProductId = "product5",
                 LineId = "line1",
-                LineName = "ProductionLine",
+                LineName = "Production Line 1",
                 //LineOperationStatus = ProductionLineStatus.Online,
-                ProductBatchNumber = 5
+                ProductBatchNumber = 6
             };
-            productionLine.RunsSteps.Add(productionStepGrinding);
+            productionLine1.RunsSteps.Add(production1Step1Fanning);
+            productionLine1.RunsSteps.Add(production1Step2Grinding);
+            productionLine1.RunsSteps.Add(production1Step3Moulding);
 
-            var factoryFloor = new FactoryFloor
+            var factory1Floor1 = new FactoryFloor
             {
-                ComfortIndex = 0.8, FloorId = "floor1", FloorName = "FactoryFloor", Temperature = 23
+                ComfortIndex = 0.8, FloorId = "factory1.floor1", FloorName = "Factory 1 Floor 1", Temperature = 23
             };
-            factoryFloor.RunsLines.Add(productionLine);
+            factory1Floor1.RunsLines.Add(productionLine1);
 
-            var factory = new Factory
+            var factory1 = new Factory
             {
                 Country = "AU",
                 FactoryId = "factory1",
@@ -57,8 +84,8 @@ namespace FactoryExample
                 Tags = String.Empty,
                 ZipCode = "4000"
             };
-            factory.Floors.Add(factoryFloor);
-            return factory;
+            factory1.Floors.Add(factory1Floor1);
+            return factory1;
         }
 
         public static async Task Main(string[] args)
