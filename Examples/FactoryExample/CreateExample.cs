@@ -50,14 +50,37 @@ namespace FactoryExample
                 //var client = GetDigitalTwinsClient(tenantId,  clientId,  clientSecret, adtEndpoint);
                 var client = GetDigitalTwinsClient(adtEndpoint);
 
-                // Twin 1 
-                var dtdl = serializer.SerializeTwin(factory);
-                var basicDigitalTwin = JsonSerializer.Deserialize<BasicDigitalTwin>(dtdl);
-                var response =
+                // Twin 1
+                var factoryDtdl = serializer.SerializeTwin(factory);
+                var factoryDigitalTwin = JsonSerializer.Deserialize<BasicDigitalTwin>(factoryDtdl);
+                var factoryResponse =
                     await client.CreateOrReplaceDigitalTwinAsync(factory.FactoryId,
-                        basicDigitalTwin!, null, cancellationToken);
-                Console.WriteLine("CREATE MODELS SUCCESS: Id={0}, ETag={1}", response.Value.Id,
-                    response.Value.ETag);
+                        factoryDigitalTwin!, null, cancellationToken);
+                Console.WriteLine("CREATE TWIN SUCCESS: Id={0}, ETag={1}", factoryResponse.Value.Id,
+                    factoryResponse.Value.ETag);
+                
+                // Twin 2
+                var floor0Dtdl = serializer.SerializeTwin(factory.Floors[0]);
+                var floor0DigitalTwin = JsonSerializer.Deserialize<BasicDigitalTwin>(floor0Dtdl);
+                var floor0Response =
+                    await client.CreateOrReplaceDigitalTwinAsync(factory.Floors[0].FloorId,
+                        floor0DigitalTwin!, null, cancellationToken);
+                Console.WriteLine("CREATE TWIN SUCCESS: Id={0}, ETag={1}", floor0Response.Value.Id,
+                    floor0Response.Value.ETag);
+                
+                // Relationship
+                var floor0Relationship = new BasicRelationship()
+                {
+                    Id = $"{factory.FactoryId}_{factory.Floors[0].FloorId}",
+                    Name = "floors",
+                    SourceId = factory.FactoryId,
+                    TargetId = factory.Floors[0].FloorId
+                };
+                var floor0RelationshipResponse =
+                    await client.CreateOrReplaceRelationshipAsync(factory.FactoryId, floor0Relationship.Id,
+                        floor0Relationship, null, cancellationToken);
+                Console.WriteLine("CREATE RELATIONSHIP SUCCESS: Id={0}, ETag={1}", floor0RelationshipResponse.Value.Id,
+                    floor0RelationshipResponse.Value.ETag);
             }
             catch (Exception ex)
             {
