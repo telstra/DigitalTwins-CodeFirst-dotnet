@@ -95,7 +95,7 @@ namespace Telstra.Twins.Serialization
             //
             // Next, write the component properties of the twin
             //
-            
+
             var componentPropertiesDictionary = GetComponentTwinProperties().ToNameValueDictionary(value, prop => prop.GetTwinPropertyName());
 
             foreach (var pair in componentPropertiesDictionary)
@@ -116,7 +116,7 @@ namespace Telstra.Twins.Serialization
 
                     var componentSerializationOptions = new JsonSerializerOptions()
                     {
-                        IgnoreNullValues = options.IgnoreNullValues,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                         Converters = { componentConverter! },
                         WriteIndented = options.WriteIndented
                     };
@@ -243,7 +243,7 @@ namespace Telstra.Twins.Serialization
 
                                     var componentSerializationOptions = new JsonSerializerOptions()
                                     {
-                                        IgnoreNullValues = options.IgnoreNullValues,
+                                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                                         Converters = { componentConverter! },
                                         WriteIndented = options.WriteIndented
                                     };
@@ -273,7 +273,7 @@ namespace Telstra.Twins.Serialization
                 GetTwinProperties<TwinOnlyPropertyAttribute>(BindingFlags.Public | BindingFlags.NonPublic |
                                                              BindingFlags.Instance)
                     .Where(prop => twinOnlyPropertyNames.Contains(prop.GetTwinPropertyName()));
-            
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (twinOnlyPropertyNamesToExclude != null)
             {

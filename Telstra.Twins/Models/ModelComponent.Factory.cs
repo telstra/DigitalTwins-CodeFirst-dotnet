@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System.Reflection;
+using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 using Telstra.Twins.Helpers;
 
@@ -13,11 +14,14 @@ namespace Telstra.Twins.Models
             var t = info.PropertyType;
             var attr = info.GetCustomAttribute<TwinComponentAttribute>();
 
-            return new ModelComponent()
-            {
-                Name = attr.Name?.ToCamelCase() ?? t.Name.ToCamelCase(),
-                Schema = t.GetDigitalTwinModelId()
-            };
+            return new ModelComponent(
+                attr!.Name?.ToCamelCase() ?? t.Name.ToCamelCase(),
+                t.GetDigitalTwinModelId(),
+                null,
+                null,
+                null,
+                null
+                );
         }
     }
 }

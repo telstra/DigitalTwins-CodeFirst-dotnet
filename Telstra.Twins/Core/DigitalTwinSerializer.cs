@@ -180,7 +180,7 @@ namespace Telstra.Twins.Core
 
         private static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
         {
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
             {
                 new JsonStringEnumConverter()
@@ -196,7 +196,7 @@ namespace Telstra.Twins.Core
 
         private static JsonSerializerOptions GetModelSerializationSettings() => new JsonSerializerOptions()
         {
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
             {
                 new JsonStringEnumConverter()
