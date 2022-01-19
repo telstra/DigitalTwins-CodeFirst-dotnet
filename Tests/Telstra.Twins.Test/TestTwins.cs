@@ -112,28 +112,6 @@ namespace Telstra.Twins.Test
 
     }
 
-    [DigitalTwin(Version = 1, DisplayName = "Twin with dateTime")]
-    public class TwinWithDateTime : TwinBase
-    {
-        [TwinProperty]
-        public DateTimeOffset Manufactured { get; set; }
-    }
-
-    [DigitalTwin(Version = 1, DisplayName = "Twin with nullable dateTime")]
-    public class TwinWithNullableDateTime : TwinBase
-    {
-        [TwinProperty]
-        public DateTimeOffset? Manufactured { get; set; }
-    }
-
-    [DigitalTwin(Version = 1, DisplayName = "Twin with schema override")]
-    public class TwinWithSchemaOverride : TwinBase
-    {
-        // Prior to dotnet6, there was no DateOnly framework type
-        [TwinProperty(Schema = "date")]
-        public string ManufacturedDateOnly { get; set; }
-    }
-
     public static class DataGenerator
     {
         public static TwinWithNestedObject twinWithNestedObject = new TwinWithNestedObject()

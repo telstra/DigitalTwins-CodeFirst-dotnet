@@ -11,7 +11,8 @@ namespace Telstra.Twins.Models
         {
             var attr = info.GetCustomAttribute<TwinRelationshipAttribute>();
 
-            return new ModelRelationship(info.Name.ToCamelCase(),
+            return new ModelRelationship(
+                attr.Name?.ToCamelCase() ?? info.Name.ToCamelCase(),
                 null,
                 attr!.DisplayName,
                 attr.Description,
