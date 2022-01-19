@@ -1,5 +1,6 @@
 ﻿using Telstra.Twins.Attributes;
 using Telstra.Twins.Core;
+using Telstra.Twins.Semantics;
 using Telstra.Twins.Services;
 using Xunit;
 
@@ -31,7 +32,6 @@ namespace Telstra.Twins.Test
             JsonAssert.Equal(expectedModel, model);
         }
 
-
         [Fact]
         public void SemanticTelemetryShouldSerialiseToModel()
         {
@@ -56,7 +56,7 @@ namespace Telstra.Twins.Test
         [DigitalTwin]
         private class SemanticTelemetryTwin : TwinBase
         {
-            [TwinTelemetry(SemanticType = "Temperature", Unit = "degreeCelsius")]
+            [TwinTelemetry(SemanticType = SemanticType.Temperature, Unit = TemperatureUnit.DegreeCelsius)]
             public int Measurement { get; set; }
         }
 

@@ -82,18 +82,6 @@ namespace Telstra.Twins.Test
                 DataGenerator.twinWithRelationship.GetType()
             };
             yield return new object[] {
-                DataGenerator.TwinWithDateTimeModel,
-                DataGenerator.twinWithDateTime.GetType()
-            };
-            yield return new object[] {
-                DataGenerator.TwinWithNullableDateTimeModel,
-                typeof(TwinWithNullableDateTime)
-            };
-            yield return new object[] {
-                DataGenerator.TwinWithSchemaOverrideModel,
-                typeof(TwinWithSchemaOverride)
-            };
-            yield return new object[] {
                 DataGenerator.TwinWithMinMultiplicityModel,
                 typeof(TwinWithMinMultiplicity)
             };
@@ -117,11 +105,6 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithRelationshipDTDL,
                 DataGenerator.twinWithRelationship
             };
-            yield return new object[] {
-                DataGenerator.TwinWithDateTimeDTDL,
-                DataGenerator.twinWithDateTime
-            };
         }
-
     }
 }

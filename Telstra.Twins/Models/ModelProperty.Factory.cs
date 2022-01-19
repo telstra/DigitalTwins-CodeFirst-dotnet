@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Telstra.Twins.Attributes;
@@ -10,50 +10,71 @@ namespace Telstra.Twins.Models
     {
         private static readonly Dictionary<Type, string> SchemaMap = new Dictionary<Type, string>
         {
-            { typeof(string), "string" },
-            { typeof(bool), "boolean" },
-            { typeof(bool?), "boolean" },
-            { typeof(double), "double" },
-            { typeof(double?), "double" },
-            { typeof(int), "integer" },
-            { typeof(int?), "integer" },
-            { typeof(Int64), "integer" },
-            // Primitive type dateTime, which is date-time including offset from RFC 3339
-            // https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#primitive-schemas
-            { typeof(DateTimeOffset), "dateTime" },
-            { typeof(DateTimeOffset?), "dateTime" }
+            { typeof(string), PrimitiveSchema.String },
+            { typeof(bool), PrimitiveSchema.Boolean },
+            { typeof(bool?), PrimitiveSchema.Boolean },
+            { typeof(double), PrimitiveSchema.Double },
+            { typeof(double?), PrimitiveSchema.Double },
+            { typeof(int), PrimitiveSchema.Integer },
+            { typeof(int?), PrimitiveSchema.Integer },
+            { typeof(Int64), PrimitiveSchema.Long },
+            { typeof(DateTimeOffset), PrimitiveSchema.DateTime },
+            { typeof(DateTimeOffset?), PrimitiveSchema.DateTime }
         };
 
         public static ModelProperty Create(PropertyInfo info)
         {
-            var property = new ModelProperty { Name = info.Name.ToCamelCase() };
-
-            if (Attribute.IsDefined(info, typeof(TwinPropertyAttribute)))
-            {
-                var attr = info.GetCustomAttribute<TwinPropertyAttribute>();
-                if (attr != null)
-                {
-                    property.Schema = attr.Schema;
-                }
-            }
-
-            property.Schema ??= SchemaFromType(info);
-
             if (Attribute.IsDefined(info, typeof(TwinTelemetryAttribute)))
             {
-                var attr = info.GetCustomAttribute<TwinTelemetryAttribute>();
-                if (attr != null)
-                {
-                    property.BaseType = "Telemetry";
-                    property.SemanticType = attr.SemanticType;
-                    property.Unit = attr.Unit;
-                }
+                var telemetryAttribute = info.GetCustomAttribute<TwinTelemetryAttribute>();
+
+                var telemetry = new ModelProperty(
+                    true,
+                    info.Name.ToCamelCase(),
+                    SchemaFromType(info),
+                    null,
+                    null,
+                    null,
+                    null,
+                    telemetryAttribute!.SemanticType,
+                    telemetryAttribute.Unit,
+                    null
+                );
+
+                return telemetry;
             }
+
+            var propertyAttribute = info.GetCustomAttribute<TwinPropertyAttribute>();
+
+            var property = new ModelProperty(
+                false,
+                info.Name.ToCamelCase(),
+                propertyAttribute!.Schema ?? SchemaFromType(info),
+                null,
+                null,
+                null,
+                null,
+                propertyAttribute.SemanticType,
+                propertyAttribute.Unit,
+                propertyAttribute.Writable ? (bool?)true : null
+            );
 
             return property;
         }
 
-        private static object SchemaFromType(PropertyInfo info)
+        internal class NestedField
+        {
+            public NestedField(string name, string schema)
+            {
+                this.name = name;
+                this.schema = schema;
+            }
+
+            public string name { get; set; }
+            public string schema { get; set; }
+        }
+
+        internal static object SchemaFromType(PropertyInfo info)
         {
             var propertyType = info.PropertyType;
             var nullableType = Nullable.GetUnderlyingType(propertyType);
@@ -87,7 +108,7 @@ namespace Telstra.Twins.Models
                 var schema = new Dictionary<string, Object>();
                 schema.Add("@type", "Map");
                 //TODO Logic to fill up the name field which is metadata
-                var mapKey = new NestedField("name", "string");
+                var mapKey = new NestedField("name", PrimitiveSchema.String);
                 schema.Add("mapKey", mapKey);
                 var mapValue = new NestedField("name",
                     SchemaMap.GetValueOrDefault(propertyType.GetGenericArguments()[1]));
@@ -112,18 +133,6 @@ namespace Telstra.Twins.Models
             }
 
             return null;
-        }
-
-        private class NestedField
-        {
-            public NestedField(string name, string schema)
-            {
-                this.name = name;
-                this.schema = schema;
-            }
-
-            public string name { get; set; }
-            public string schema { get; set; }
         }
     }
 

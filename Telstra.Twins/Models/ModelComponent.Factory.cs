@@ -1,11 +1,12 @@
-﻿using System.Reflection;
-using Telstra.Twins.Helpers;
+﻿#nullable enable
+
+using System.Reflection;
 using Telstra.Twins.Common;
-using Telstra.Twins.Attributes;
+using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Models
 {
-    public partial class ModelComponent : Content
+    public partial class ModelComponent
     {
         public static ModelComponent Create(PropertyInfo info)
         {
