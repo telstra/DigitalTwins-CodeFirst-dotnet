@@ -86,3 +86,5 @@ https://azure.github.io/azure-sdk/dotnet_introduction.html.
 The specifications for Digital Twins Definition Language version 2 (DTDLv2), are available 
 from Microsoft under a Creative Commons (Attribution) licence at:
 https://github.com/Azure/opendigitaltwins-dtdl
+
+A diagram of the structure of DTDLv2 is provided in the docs folder [docs/pics/DTDLv2-structure.png](docs/pics/DTDLv2-structure.png)

@@ -12,6 +12,8 @@ namespace Telstra.Twins.Services
         // Aggregates the results of GetDerivedTypes and GetRelatedTypes
         List<Type> GetDependendentTypes(Type t);
         Type GetTypeFromJson(string json);
+        TwinModel GetTwinModel(Type type);
+
         List<Type> All { get; }
 
         public IExampleProvider ExampleProvider { get; }

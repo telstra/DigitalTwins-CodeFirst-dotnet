@@ -1,49 +1,40 @@
-﻿using System.Text.Json.Serialization;
+﻿#nullable enable
+
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Telstra.Twins.Models
 {
     public partial class ModelRelationship : Content
     {
-        public ModelRelationship(string name,
-            string displayName = null,
-            string id = null,
-            string comment = null,
-            string description = null,
-            int? maxMultiplicity = null,
-            int? minMultiplicity = null,
-            string target = null,
-            bool? writable = null) : base("Relationship")
+        // TODO: Support Properties element
+        
+        private const string TypeRelationship = "Relationship";
+
+        private ModelRelationship(string name, string? id, string? displayName, string? description,
+            string? comment, int? maxMultiplicity, int? minMultiplicity, string? target, bool? writable)
+            : base(TypeRelationship, name, id, displayName, description, comment)
         {
-            Name = name;
-            DisplayName = displayName;
-            Id = id;
-            Comment = comment;
-            Description = description;
             MaxMultiplicity = maxMultiplicity;
             MinMultiplicity = minMultiplicity;
             Target = target;
             Writable = writable;
         }
 
-        public string Comment { get; set; }
-        public string Description { get; set; }
-        public string DisplayName { get; set; }
-
-        public string Id { get; set; }
-
         [JsonPropertyName("maxMultiplicity")]
         [JsonProperty("maxMultiplicity")]
-        public int? MaxMultiplicity { get; set; }
+        public int? MaxMultiplicity { get; }
 
         [JsonPropertyName("minMultiplicity")]
         [JsonProperty("minMultiplicity")]
-        public int? MinMultiplicity { get; set; }
+        public int? MinMultiplicity { get; }
 
         [JsonProperty("target")]
         [JsonPropertyName("target")]
-        public string Target { get; set; }
+        public string? Target { get; }
 
-        public bool? Writable { get; set; }
+        [JsonProperty("writable")]
+        [JsonPropertyName("writable")]
+        public bool? Writable { get; }
     }
 }

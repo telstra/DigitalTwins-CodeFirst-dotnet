@@ -13,12 +13,13 @@ namespace Telstra.Twins.Services
     public class ModelLibrary : IModelLibrary
     {
         private Dictionary<string, Type> _modelTypes;
+        private Dictionary<Type, TwinModel> _twinModels;
 
         // NOTE: For now there can only be one example provider.
         //       The first provider discovered will be used.
         public IExampleProvider ExampleProvider { get; private set; }
 
-//        private static PluginLoadContext _loadContext;
+        //        private static PluginLoadContext _loadContext;
 
         private const string PLUGIN_PATH = "plugins";
 
@@ -26,13 +27,14 @@ namespace Telstra.Twins.Services
 
         public ModelLibrary()
         {
-//            _loadContext = new PluginLoadContext(FullPath);
+            //            _loadContext = new PluginLoadContext(FullPath);
             Init();
         }
 
         private void Init()
         {
             _modelTypes = new Dictionary<string, Type>();
+            _twinModels = new Dictionary<Type, TwinModel>();
 
             //Directory.GetFiles(FullPath)
             //    .ToList()
@@ -42,18 +44,19 @@ namespace Telstra.Twins.Services
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            var types = assemblies.SelectMany(a => 
+            var types = assemblies.SelectMany(a =>
                                     a.GetTypes()
                                     .Where(t => Attribute.IsDefined(t, typeof(DigitalTwinAttribute))))
                                     .OrderBy(t => t, TypeDerivationComparer.Instance)
                                 .ToList();
-
+            TwinModelFactory twinModelFactory = new TwinModelFactory();
             types.ForEach(dt =>
             {
                 if (!dt.IsInterface)
                 {
                     var attr = dt.GetCustomAttribute<DigitalTwinAttribute>();
                     _modelTypes.Add(attr.GetFullModelId(dt), dt);
+                    _twinModels.Add(dt, twinModelFactory.CreateTwinModel(dt));
                 }
             });
 
@@ -74,7 +77,7 @@ namespace Telstra.Twins.Services
             return _modelTypes[modelId];
         }
 
-        public List<Type> GetDerivedTypes(Type t) => 
+        public List<Type> GetDerivedTypes(Type t) =>
             _modelTypes.Values.Where(mt => t.GetModelPropertyType().IsAssignableFrom(mt) && mt != t.GetModelPropertyType())
             .ToList();
 
@@ -92,7 +95,8 @@ namespace Telstra.Twins.Services
                 .Select(p => p.PropertyType.GetModelPropertyType())
                 .ToList();
 
-            props.ForEach(t => {
+            props.ForEach(t =>
+            {
                 if (t != modelType)
                 {
                     TraverseRelationships(t, list);
@@ -116,7 +120,7 @@ namespace Telstra.Twins.Services
 
         public Type GetTypeFromJson(string json)
         {
-            var modelId =  JsonHelpers.GetModelId(json);
+            var modelId = JsonHelpers.GetModelId(json);
 
             if (!_modelTypes.ContainsKey(modelId))
                 return null;
@@ -124,5 +128,10 @@ namespace Telstra.Twins.Services
             return _modelTypes[modelId];
         }
 
-   }
+        public TwinModel GetTwinModel(Type type)
+        {
+            var exists = _twinModels.TryGetValue(type, out var model);
+            return exists ? model : throw new Exception($"Twin model for type {type.Name} does not exists!");
+        }
+    }
 }
