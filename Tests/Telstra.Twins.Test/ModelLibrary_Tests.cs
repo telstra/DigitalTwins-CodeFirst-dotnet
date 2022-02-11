@@ -1,4 +1,5 @@
-﻿using Telstra.Twins.Services;
+﻿using System.Linq;
+using Telstra.Twins.Services;
 using Xunit;
 
 namespace Telstra.Twins.Test
@@ -28,6 +29,40 @@ namespace Telstra.Twins.Test
             Assert.Collection(twinModel.Relationships,
                 r => Assert.True(r.Key.Name.Equals(nameof(Building.Floors)) && r.Value.Name.Equals("contains")),
                 r => Assert.True(r.Key.Name.Equals(nameof(Building.OtherSpaces)) && r.Value.Name.Equals("otherPlaces")));
+        }
+
+        [Fact]
+        public void TwinModelWithAbstractProperty_Should_Not_List_AbstractProperty_Twice()
+        {
+            // arrange
+            var typeToAnalyze = typeof(BuildingWithAbstractProperty);
+
+            // act
+            var twinModel = _modelLibrary.GetTwinModel(typeToAnalyze);
+
+            // assert
+            var contentsCount = twinModel
+                .contents
+                .GroupBy(c => c.Name)
+                .All(g => g.Count() == 1);
+            Assert.True(contentsCount);
+        }
+
+        [Fact]
+        public void TwinModelFactory_TwinModelWithAbstractProperty_Should_Not_List_AbstractProperty_Twice()
+        {
+            // arrange
+            var typeToAnalyze = typeof(BuildingWithAbstractProperty);
+            var factory = new TwinModelFactory();
+            // act
+            var twinModel = factory.CreateTwinModel(typeToAnalyze);
+
+            // assert
+            var contentsCount = twinModel
+                .contents
+                .GroupBy(c => c.Name)
+                .All(g => g.Count() == 1);
+            Assert.True(contentsCount);
         }
     }
 }
