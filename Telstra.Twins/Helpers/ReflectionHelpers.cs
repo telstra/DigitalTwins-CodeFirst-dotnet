@@ -77,6 +77,7 @@ namespace Telstra.Twins.Helpers
                 ? t.BaseType.GetProperties()
                     .Where(p => p.DeclaringType == t.BaseType)
                     .Where(p => Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
+                    .Where(p => !p.GetGetMethod().IsAbstract)
                     .ToList()
                 : new();
 

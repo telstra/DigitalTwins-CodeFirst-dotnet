@@ -12,6 +12,18 @@ namespace Telstra.Twins.Test
         public string Name { get; set; }
     }
 
+    public abstract class BuildingBaseWithAbstractProperty : TwinBase
+    {
+        [TwinProperty]
+        public abstract string AbstractProperty1 { get; }
+    }
+
+    [DigitalTwin(Version = 1, DisplayName = "BuildingWithAbstractProperty")]
+    public abstract class BuildingWithAbstractProperty : BuildingBaseWithAbstractProperty
+    {
+        [TwinProperty]
+        public override string AbstractProperty1 { get; } = "Test";
+    }
 
     [DigitalTwin(Version = 1, DisplayName = "Building")]
     public class Building : Space
