@@ -1,4 +1,5 @@
 ﻿using System;
+using FactoryExample.Devices;
 using Telstra.Twins.Core;
 using Telstra.Twins.Services;
 
@@ -30,7 +31,7 @@ namespace FactoryExample
             Console.WriteLine(twin1Dtdl);
             Console.WriteLine();
 
-            var twin2Dtdl = serializer.SerializeTwin(factory.Floors[0].RunsLines[0].RunsSteps[0]);
+            var twin2Dtdl = serializer.SerializeTwin(factory.Floors[0].RunsLines[0].RunsSteps[0] as ProductionStepFanning);
             Console.WriteLine(twin2Dtdl);
             Console.WriteLine();
         }

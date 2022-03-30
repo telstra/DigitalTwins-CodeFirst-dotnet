@@ -145,7 +145,7 @@ namespace FactoryExample
         private static void ShowHelp()
         {
             Console.WriteLine(" --serialize model : shows serialized model examples");
-            Console.WriteLine(" --serialize example : shows serialized twin examples");
+            Console.WriteLine(" --serialize twin : shows serialized twin examples");
             Console.WriteLine(" --parse model : parse and validate the example model");
             Console.WriteLine(" --create model --endpoint <dtEndpoint>: parse and upload the example model");
         }
