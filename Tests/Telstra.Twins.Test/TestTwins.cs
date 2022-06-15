@@ -124,6 +124,19 @@ namespace Telstra.Twins.Test
 
     }
 
+    public enum State
+    {
+        Actice = 1,
+        Inactive = 2
+    }
+
+    [DigitalTwin(DisplayName = "Twin with enum property")]
+    public class TwinWithEnum : TwinBase
+    {
+        [TwinProperty]
+        public State State { get; set; } = State.Inactive;
+    }
+
     public static class DataGenerator
     {
         public static TwinWithNestedObject twinWithNestedObject = new TwinWithNestedObject()
@@ -167,6 +180,13 @@ namespace Telstra.Twins.Test
             }
         };
 
+        public static TwinWithEnum twinWithEnum = new TwinWithEnum()
+        {
+            TwinId = "123",
+            ETag = "0",
+            State = State.Inactive
+        };
+
         public static string SimpleTwinDTDL = "{\r\n  \"$dtId\": \"122233\",\r\n  \"$etag\": \"4444\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"measurement\": 2,\r\n  \"quantity\": 1\r\n}";
         public static string SimpleTwinModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Simple Twin\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"quantity\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"measurement\",\r\n      \"schema\": \"integer\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithNestedObjectDTDL = "{\r\n  \"$dtId\": \"11111\",\r\n  \"$etag\": \"abcd\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"speed\": 50,\r\n  \"nestedObj\": {\r\n    \"name\": \"name\",\r\n    \"value\": \"value\"\r\n  }\r\n}";
@@ -176,5 +196,7 @@ namespace Telstra.Twins.Test
         public static string TwinWithMinMultiplicityModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithminmultiplicity;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with min multiplicity\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"minMultiplicity\": 2,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"test Relationship\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithAllAttributesDTDL = "{\r\n  \"$dtId\": \"0\",\r\n  \"$etag\": \"0\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithallattributes;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"flag\": true,\r\n  \"testProperty\": \"property\",\r\n  \"intArray\": [\r\n    1,\r\n    2,\r\n    3\r\n  ],\r\n  \"stringMap\": {\r\n    \"key\": \"value\"\r\n  },\r\n  \"componentTwin\": {\r\n    \"$dtId\": \"122233\",\r\n    \"$etag\": \"4444\",\r\n    \"$metadata\": {\r\n      \"$model\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"PropertyMetadata\": {}\r\n    },\r\n    \"measurement\": 2,\r\n    \"quantity\": 1\r\n  }\r\n}";
         public static string TwinWithAllAttributesModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithallattributes;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with all attributes\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"property\",\r\n      \"schema\": \"string\"\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"intArray\",\r\n      \"schema\": {\r\n        \"@type\": \"Array\",\r\n        \"elementSchema\": \"integer\"\r\n      }\r\n    },\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"stringMap\",\r\n      \"schema\": {\r\n        \"@type\": \"Map\",\r\n        \"mapKey\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        },\r\n        \"mapValue\": {\r\n          \"name\": \"name\",\r\n          \"schema\": \"string\"\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 2,\r\n      \"minMultiplicity\": 1,\r\n      \"target\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"twinRelationship\"\r\n    },\r\n    {\r\n      \"@type\": \"Component\",\r\n      \"name\": \"simpleTwin\",\r\n      \"schema\": \"dtmi:telstra:twins:test:simpletwin;1\"\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"flag\",\r\n      \"schema\": \"boolean\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithEnumDTDL = "{\r\n  \"$dtId\": \"123\",\r\n  \"$etag\": \"0\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithenum;1\",\r\n    \"PropertyMetadata\": {}\r\n  },\r\n  \"state\": \"Inactive\"\r\n}";
+        public static string TwinWithEnumModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithenum;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with enum property\",\r\n  \"contents\": [\r\n    {\r\n      \"schema\": {\r\n        \"@type\": \"Enum\",\r\n        \"valueSchema\": \"integer\",\r\n        \"enumValues\": [\r\n          {\r\n            \"name\": \"Actice\",\r\n            \"displayName\": \"Actice\",\r\n            \"enumValue\": 1\r\n          },\r\n          {\r\n            \"name\": \"Inactive\",\r\n            \"displayName\": \"Inactive\",\r\n            \"enumValue\": 2\r\n          }\r\n        ]\r\n      },\r\n      \"@type\": \"Property\",\r\n      \"name\": \"state\"\r\n    }\r\n  ]\r\n}";
     }
 }

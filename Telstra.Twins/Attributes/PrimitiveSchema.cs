@@ -51,5 +51,10 @@
         /// A full-time as defined in section 5.6 of RFC 3339
         /// </summary>
         public const string Time = "time";
+
+        /// <summary>
+        /// enum
+        /// </summary>
+        public const string Enum = "Enum";
     }
 }

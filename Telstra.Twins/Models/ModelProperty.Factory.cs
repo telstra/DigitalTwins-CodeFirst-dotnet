@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 
@@ -19,7 +20,7 @@ namespace Telstra.Twins.Models
             { typeof(int?), PrimitiveSchema.Integer },
             { typeof(Int64), PrimitiveSchema.Long },
             { typeof(DateTimeOffset), PrimitiveSchema.DateTime },
-            { typeof(DateTimeOffset?), PrimitiveSchema.DateTime }
+            { typeof(DateTimeOffset?), PrimitiveSchema.DateTime },
         };
 
         public static ModelProperty Create(PropertyInfo info)
@@ -72,6 +73,25 @@ namespace Telstra.Twins.Models
 
             public string name { get; set; }
             public string schema { get; set; }
+        }
+
+        internal class EnumValue
+        {
+            public EnumValue(string name, string displayName, int value)
+            {
+                Name = name;
+                DisplayName = displayName;
+                Value = value;
+            }
+
+            [JsonPropertyName("name")]
+            public string Name { get; init; }
+
+            [JsonPropertyName("displayName")]
+            public string DisplayName { get; init; }
+
+            [JsonPropertyName("enumValue")]
+            public int Value { get; init; }
         }
 
         internal static object SchemaFromType(PropertyInfo info)
@@ -129,6 +149,21 @@ namespace Telstra.Twins.Models
                 }
 
                 schema.Add("fields", fields);
+                return schema;
+            }
+
+            if (propertyType.IsEnum)
+            {
+                var schema = new Dictionary<string, Object>();
+                schema.Add("@type", PrimitiveSchema.Enum);
+                schema.Add("valueSchema", PrimitiveSchema.Integer);
+                var enumValues = new List<EnumValue>();
+                foreach (var enumVal in Enum.GetValues(propertyType))
+                {
+                    enumValues.Add(new EnumValue(enumVal.ToString(), enumVal.ToString(), (int)enumVal));
+                }
+
+                schema.Add("enumValues", enumValues);
                 return schema;
             }
 
