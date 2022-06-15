@@ -1,12 +1,8 @@
-﻿using Azure.Storage.Blobs.Models;
-using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using Telstra.Twins.Common;
