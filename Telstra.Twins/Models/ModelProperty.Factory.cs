@@ -152,13 +152,13 @@ namespace Telstra.Twins.Models
                 return schema;
             }
 
-            if (propertyType.IsEnum)
+            if (propertyType.IsEnum || (nullableType != null && nullableType.IsEnum))
             {
                 var schema = new Dictionary<string, Object>();
                 schema.Add("@type", PrimitiveSchema.Enum);
                 schema.Add("valueSchema", PrimitiveSchema.Integer);
                 var enumValues = new List<EnumValue>();
-                foreach (var enumVal in Enum.GetValues(propertyType))
+                foreach (var enumVal in Enum.GetValues(nullableType ?? propertyType))
                 {
                     enumValues.Add(new EnumValue(enumVal.ToString(), enumVal.ToString(), (int)enumVal));
                 }

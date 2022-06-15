@@ -29,7 +29,6 @@ namespace Telstra.Twins.Test
         {
             var model = Serializer.SerializeModel(twinType);
             JsonAssert.Equal(expectedModel, model);
-
         }
 
         [Theory]
