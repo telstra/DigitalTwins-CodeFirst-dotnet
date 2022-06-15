@@ -9,7 +9,7 @@ variables:
   localBuildCounter: $[counter('buildCounter',1)]
   buildConfiguration: 'Release'
   localPreReleaseTag: '-alpha'
-  versionNumber: '1.0.5'
+  versionNumber: '1.0.6'
 
 resources:
   repositories:
@@ -32,7 +32,7 @@ jobs:
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '5.x'
+      version: '6.x'
 
   # Create and set the variables preReleaseTag, manifestTagPrefix and packageVersion
   - template: steps/set-build-variables.yml@templates

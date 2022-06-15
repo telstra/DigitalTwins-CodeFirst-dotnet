@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.0.5</Version>
-        <Authors>Telstra ADT Team</Authors>
-        <Company>Telstra</Company>
+        <Version>1.0.6</Version>
+        <Authors>Telstra ADT Team, P6.6 Owners</Authors>
+        <Company>Telstra, PTW-Freiburg</Company>
         <Description>Digital Twins Common</Description>
     </PropertyGroup>
 
