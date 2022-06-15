@@ -29,12 +29,13 @@ namespace Telstra.Twins.Test
         {
             var model = Serializer.SerializeModel(twinType);
             JsonAssert.Equal(expectedModel, model);
-
         }
 
         [Theory]
         [InlineData(typeof(Building))]
         [InlineData(typeof(Floor))]
+        [InlineData(typeof(TwinWithNestedObject))]
+        [InlineData(typeof(TwinWithEnum))]
         public void ShouldSerialiseModelToDTDLCustomized(Type type)
         {
             var model = Serializer.SerializeModel(type);
@@ -85,6 +86,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithMinMultiplicityModel,
                 typeof(TwinWithMinMultiplicity)
             };
+            yield return new object[] {
+                DataGenerator.TwinWithEnumModel,
+                typeof(TwinWithEnum)
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()
@@ -104,6 +109,10 @@ namespace Telstra.Twins.Test
             yield return new object[] {
                 DataGenerator.TwinWithRelationshipDTDL,
                 DataGenerator.twinWithRelationship
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithEnumDTDL,
+                DataGenerator.twinWithEnum
             };
         }
     }
