@@ -9,7 +9,7 @@ variables:
   localBuildCounter: $[counter('buildCounter',1)]
   buildConfiguration: 'Release'
   localPreReleaseTag: '-alpha'
-  versionNumber: '1.0.6'
+  versionNumber: '1.0.7'
 
 resources:
   repositories:
