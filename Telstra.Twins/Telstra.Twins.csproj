@@ -4,10 +4,23 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Telstra.Twins</RootNamespace>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>Telstra ADT Team, P6.6 Owners</Authors>
         <Company>Telstra, PTW-Freiburg</Company>
         <Description>Telstra Digital Twins Core</Description>
+        <PackageId>P6_6_1_Telstra.Twins</PackageId>
+        <Product>P6_6_1_Telstra.Twins</Product>
+        <PackageReleaseNotes>
+            DeviceInstancesDB NuGet versions:
+            1.0.7
+            - Renamed the packageId
+
+            1.0.6
+            - Added support for Enum properties
+
+            1.0.5
+            - First Release for ADT repository
+        </PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
