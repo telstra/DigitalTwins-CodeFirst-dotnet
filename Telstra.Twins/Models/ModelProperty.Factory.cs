@@ -21,6 +21,8 @@ namespace Telstra.Twins.Models
             { typeof(Int64), PrimitiveSchema.Long },
             { typeof(DateTimeOffset), PrimitiveSchema.DateTime },
             { typeof(DateTimeOffset?), PrimitiveSchema.DateTime },
+            { typeof(Guid), PrimitiveSchema.String },
+            { typeof(Guid?), PrimitiveSchema.String },
         };
 
         public static ModelProperty Create(PropertyInfo info)
