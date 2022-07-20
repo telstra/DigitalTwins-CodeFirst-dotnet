@@ -185,7 +185,8 @@ namespace Telstra.Twins.Core
             {
                 new JsonStringEnumConverter()
             },
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         /// <summary>
@@ -201,7 +202,8 @@ namespace Telstra.Twins.Core
             {
                 new JsonStringEnumConverter()
             },
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
     }
 }

@@ -118,7 +118,8 @@ namespace Telstra.Twins.Serialization
                     {
                         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                         Converters = { componentConverter! },
-                        WriteIndented = options.WriteIndented
+                        WriteIndented = options.WriteIndented,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                     };
 
                     JsonSerializer.Serialize(writer, propertyValue, componentSerializationOptions);

@@ -45,7 +45,7 @@ namespace Telstra.Twins.Test
   ""$etag"": ""5678"",
   ""$metadata"": {
     ""$model"": ""dtmi:telstra:twins:test:twinwithdatetime;1"",
-    ""PropertyMetadata"": {}
+    ""propertyMetadata"": {}
   },
   ""manufactured"": ""2021-11-17T22:23:00+10:00""
 }";

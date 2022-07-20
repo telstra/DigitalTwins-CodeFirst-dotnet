@@ -65,14 +65,14 @@ namespace Telstra.Twins.Models
 
         internal class NestedField
         {
-            public NestedField(string name, string schema)
+            public NestedField(string name, object schema)
             {
                 this.name = name;
                 this.schema = schema;
             }
 
             public string name { get; set; }
-            public string schema { get; set; }
+            public object schema { get; set; }
         }
 
         internal class EnumValue
@@ -145,7 +145,7 @@ namespace Telstra.Twins.Models
                 foreach (var fieldInfo in fieldsInfo)
                 {
                     fields.Add(new NestedField(fieldInfo.Name,
-                        SchemaMap.GetValueOrDefault(fieldInfo.PropertyType)));
+                        SchemaFromType(fieldInfo)));
                 }
 
                 schema.Add("fields", fields);
