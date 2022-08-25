@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Common;
 
@@ -78,6 +78,14 @@ namespace Telstra.Twins.Helpers
                     .Where(p => p.DeclaringType == t.BaseType)
                     .Where(p => Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
                     .Where(p => !p.GetGetMethod().IsAbstract)
+                    .ToList()
+                : new();
+
+        public static List<PropertyInfo> GetModelPropertiesFromExtendingParent(this Type t) =>
+            !t.BaseType.IsAbstract && Attribute.IsDefined(t.BaseType.GetModelPropertyType(), typeof(DigitalTwinAttribute))
+                ? t.BaseType.GetProperties()
+                    .Where(p => p.DeclaringType == t.BaseType)
+                    .Where(p => Attribute.IsDefined(p, typeof(TwinPropertyAttribute)))
                     .ToList()
                 : new();
 

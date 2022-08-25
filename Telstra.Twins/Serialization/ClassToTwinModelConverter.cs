@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Helpers;
-using Telstra.Twins.Models;
+using Telstra.Twins.Services;
 
 namespace Telstra.Twins.Serialization
 {
@@ -70,11 +69,10 @@ namespace Telstra.Twins.Serialization
             //
             // Next, read the contents of the model
             //
-            var contents = new List<Content>();
-            AddPropertiesContent(contents);
-            AddModelRelationshipsContent(contents);
-            AddComponentsContent(contents);
-            AddTelemetryContent(contents);
+            var factory = new TwinModelFactory();
+
+            var contents = factory.CreateTwinModel<T>()
+                .contents;
 
             //
             // Finally, write the contents out in an array of content types
@@ -116,89 +114,43 @@ namespace Telstra.Twins.Serialization
                     if (name != null)
                     {
                         // Does the Json property match one of the special model only properties?
-                        if (propMap.TryGetValue(name, out var property))
+                        if (!propMap.TryGetValue(name, out var property))
                         {
-                            // What type is the property?
-                            var propertyType = property.PropertyType;
+                            continue;
+                        }
+                        // What type is the property?
+                        var propertyType = property.PropertyType;
 
-                            if (propertyType == typeof(string))
-                            {
-                                var typedValue = reader.GetString();
-                                property.SetValue(twinInstance, typedValue);
-                            }
-                            else if (propertyType == typeof(short))
-                            {
-                                var typedValue = reader.GetInt16();
-                                property.SetValue(twinInstance, typedValue);
-                            }
-                            else if (propertyType == typeof(int))
-                            {
-                                var typedValue = reader.GetInt32();
-                                property.SetValue(twinInstance, typedValue);
-                            }
-                            else if (propertyType == typeof(long))
-                            {
-                                var typedValue = reader.GetInt64();
-                                property.SetValue(twinInstance, typedValue);
-                            }
-                            else if (propertyType == typeof(double))
-                            {
-                                var typedValue = reader.GetDouble();
-                                property.SetValue(twinInstance, typedValue);
-                            }
+                        if (propertyType == typeof(string))
+                        {
+                            var typedValue = reader.GetString();
+                            property.SetValue(twinInstance, typedValue);
+                        }
+                        else if (propertyType == typeof(short))
+                        {
+                            var typedValue = reader.GetInt16();
+                            property.SetValue(twinInstance, typedValue);
+                        }
+                        else if (propertyType == typeof(int))
+                        {
+                            var typedValue = reader.GetInt32();
+                            property.SetValue(twinInstance, typedValue);
+                        }
+                        else if (propertyType == typeof(long))
+                        {
+                            var typedValue = reader.GetInt64();
+                            property.SetValue(twinInstance, typedValue);
+                        }
+                        else if (propertyType == typeof(double))
+                        {
+                            var typedValue = reader.GetDouble();
+                            property.SetValue(twinInstance, typedValue);
                         }
                     }
                 }
             }
 
             return (T)twinInstance;
-        }
-
-        protected static void AddTelemetryContent(List<Content> contents)
-        {
-            var typeToAnalyze = typeof(T);
-            var modelProperties = typeToAnalyze.GetModelTelemetry()
-                .ToList()
-                .Select(ModelProperty.Create);
-            contents.AddRange(modelProperties);
-        }
-
-        protected static void AddComponentsContent(List<Content> contents)
-        {
-            var typeToAnalyze = typeof(T);
-            var modelProperties = typeToAnalyze.GetModelComponents()
-                .ToList()
-                .Select(ModelComponent.Create);
-            contents.AddRange(modelProperties);
-        }
-
-        protected static void AddPropertiesContent(List<Content> contents)
-        {
-            var typeToAnalyze = typeof(T);
-            var modelProperties = typeToAnalyze.GetModelProperties()
-                .ToList()
-                .Select(ModelProperty.Create);
-            var parentProperties = typeToAnalyze.GetModelPropertiesFromAbstractParent()
-                .ToList()
-                .Select(ModelProperty.Create);
-
-            contents.AddRange(parentProperties);
-            contents.AddRange(modelProperties);
-        }
-
-        protected static void AddModelRelationshipsContent(List<Content> contents)
-        {
-            var typeToAnalyze = typeof(T);
-            var modelProperties = typeToAnalyze.GetModelRelationships()
-                .ToList()
-                .Select(ModelRelationship.Create);
-
-            var parentProperties = typeToAnalyze.GetModelRelationshipsFromAbstractParent()
-                .ToList()
-                .Select(ModelRelationship.Create);
-
-            contents.AddRange(parentProperties);
-            contents.AddRange(modelProperties);
         }
 
         protected static List<KeyValuePair<string, object>> GetModelOnlyProperties(T twin, string[] modelOnlyPropertyNames)

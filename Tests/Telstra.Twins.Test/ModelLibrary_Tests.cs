@@ -64,5 +64,26 @@ namespace Telstra.Twins.Test
                 .All(g => g.Count() == 1);
             Assert.True(contentsCount);
         }
+
+        [Fact]
+        public void TwinModelFactory_ExtendingBuilding_Should_Not_List_BaseProperties()
+        {
+            // arrange
+            var typeToAnalyze = typeof(ExtendingBuilding);
+            var factory = new TwinModelFactory();
+
+            var twinModelFromBase = factory.CreateTwinModel<BuildingWithAbstractProperty>();
+
+            // act
+            var twinModel = factory.CreateTwinModel(typeToAnalyze);
+
+            // assert
+            var baseModelContents = twinModelFromBase.contents.Select(x => x.Name).ToList();
+            var extendedModelContents = twinModel.contents.Select(x => x.Name).ToList();
+
+            var containsBaseContents = extendedModelContents
+                .Any(e => baseModelContents.Contains(e));
+            Assert.False(containsBaseContents);
+        }
     }
 }
