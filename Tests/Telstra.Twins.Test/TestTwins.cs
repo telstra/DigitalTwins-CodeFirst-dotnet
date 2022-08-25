@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using Telstra.Twins.Attributes;
 
@@ -19,8 +17,21 @@ namespace Telstra.Twins.Test
     }
 
     [DigitalTwin(Version = 1, DisplayName = "BuildingWithAbstractProperty")]
-    public abstract class BuildingWithAbstractProperty : BuildingBaseWithAbstractProperty
+    public class BuildingWithAbstractProperty : BuildingBaseWithAbstractProperty
     {
+        [TwinProperty]
+        public virtual string VirtualProperty1 { get; set; }
+
+        [TwinProperty]
+        public override string AbstractProperty1 { get; } = "Test";
+    }
+
+    [DigitalTwin(Version = 1, DisplayName = "BuildingWithAbstractProperty")]
+    public class ExtendingBuilding : BuildingWithAbstractProperty
+    {
+        [TwinProperty]
+        public override string VirtualProperty1 { get; set; } = "Default Value";
+
         [TwinProperty]
         public override string AbstractProperty1 { get; } = "Test";
     }

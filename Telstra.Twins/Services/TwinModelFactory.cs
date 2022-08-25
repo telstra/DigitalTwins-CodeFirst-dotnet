@@ -31,7 +31,6 @@ namespace Telstra.Twins.Services
         protected static void AddTelemetryContent(Type typeToAnalyze, List<Content> contents)
         {
             var modelProperties = typeToAnalyze.GetModelTelemetry()
-                .ToList()
                 .Select(ModelProperty.Create);
             contents.AddRange(modelProperties);
         }
@@ -39,7 +38,6 @@ namespace Telstra.Twins.Services
         protected static void AddComponentsContent(Type typeToAnalyze, List<Content> contents)
         {
             var modelProperties = typeToAnalyze.GetModelComponents()
-                .ToList()
                 .Select(ModelComponent.Create);
             contents.AddRange(modelProperties);
         }
@@ -47,14 +45,16 @@ namespace Telstra.Twins.Services
         protected static void AddPropertiesContent(Type typeToAnalyze, List<Content> contents)
         {
             var modelProperties = typeToAnalyze.GetModelProperties()
-                .ToList()
                 .Select(ModelProperty.Create);
             var parentProperties = typeToAnalyze.GetModelPropertiesFromAbstractParent()
-                .ToList()
                 .Select(ModelProperty.Create);
 
+            var extendingParentProperties = typeToAnalyze.GetModelPropertiesFromExtendingParent()
+                .Select(ModelProperty.Create);
+
+            // add only properties that are not already part of the extending parent model
             contents.AddRange(parentProperties);
-            contents.AddRange(modelProperties);
+            contents.AddRange(modelProperties.Where(x => !extendingParentProperties.Any(e => e.Name == x.Name)));
         }
 
 
