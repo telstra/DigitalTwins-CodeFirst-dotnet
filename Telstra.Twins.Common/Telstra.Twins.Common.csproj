@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <Authors>Telstra ADT Team, P6.6 Owners</Authors>
         <Company>Telstra, PTW-Freiburg</Company>
         <Description>Digital Twins Common</Description>
