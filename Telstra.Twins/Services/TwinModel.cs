@@ -9,6 +9,6 @@ namespace Telstra.Twins.Services
         public List<Content> contents { get; init; }
 
         public Dictionary<PropertyInfo, ModelRelationship> Relationships { get; init; }
-
+        public Dictionary<PropertyInfo, ModelRelationship> ExtendingRelationships { get; init; } = new();
     }
 }
