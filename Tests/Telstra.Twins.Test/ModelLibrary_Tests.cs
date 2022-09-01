@@ -96,6 +96,7 @@ namespace Telstra.Twins.Test
             var twinModel = _modelLibrary.GetTwinModel(typeToAnalyze);
 
             // assert
+            Assert.Equal(3, twinModel.AllRelationships.Count);
             Assert.Equal(2, twinModel.ExtendingRelationships.Count);
         }
 
@@ -109,6 +110,7 @@ namespace Telstra.Twins.Test
             var twinModel = _modelLibrary.GetTwinModel(typeToAnalyze);
 
             // assert
+            Assert.Equal(3, twinModel.AllRelationships.Count);
             Assert.Equal(3, twinModel.ExtendingRelationships.Count);
         }
 
