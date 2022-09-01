@@ -27,7 +27,7 @@ namespace Telstra.Twins.Test
     }
 
     [DigitalTwin(Version = 1, DisplayName = "BuildingWithAbstractProperty")]
-    public class ExtendingBuilding : BuildingWithAbstractProperty
+    public class ExtendedBuildingWithAbstractParent : BuildingWithAbstractProperty
     {
         [TwinProperty]
         public override string VirtualProperty1 { get; set; } = "Default Value";
@@ -50,6 +50,20 @@ namespace Telstra.Twins.Test
 
         [TwinRelationship(Name = "otherPlaces")]
         public List<Space> OtherSpaces { get; set; }
+    }
+
+    [DigitalTwin(Version = 1, DisplayName = "Extended Building")]
+    public class ExtendedBuilding : Building
+    {
+        [TwinRelationship(Name = "hasTwins")]
+        public List<SimpleTwin> SimpleTwins { get; set; }
+    }
+
+    [DigitalTwin(Version = 1, DisplayName = "Extended Building")]
+    public class DoubleExtendedBuilding : ExtendedBuilding
+    {
+        [TwinProperty]
+        public int Dummy { get; set; }
     }
 
     [DigitalTwin(Version = 1, DisplayName = "Floor")]

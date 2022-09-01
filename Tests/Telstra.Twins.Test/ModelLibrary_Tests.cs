@@ -69,7 +69,7 @@ namespace Telstra.Twins.Test
         public void TwinModelFactory_ExtendingBuilding_Should_Not_List_BaseProperties()
         {
             // arrange
-            var typeToAnalyze = typeof(ExtendingBuilding);
+            var typeToAnalyze = typeof(ExtendedBuildingWithAbstractParent);
             var factory = new TwinModelFactory();
 
             var twinModelFromBase = factory.CreateTwinModel<BuildingWithAbstractProperty>();
@@ -85,5 +85,32 @@ namespace Telstra.Twins.Test
                 .Any(e => baseModelContents.Contains(e));
             Assert.False(containsBaseContents);
         }
+
+        [Fact]
+        public void ExtendingRelationships_ExtendingBuilding_Should_List_BaseRelationships()
+        {
+            // arrange
+            var typeToAnalyze = typeof(ExtendedBuilding);
+
+            // act
+            var twinModel = _modelLibrary.GetTwinModel(typeToAnalyze);
+
+            // assert
+            Assert.Equal(2, twinModel.ExtendingRelationships.Count);
+        }
+
+        [Fact]
+        public void ExtendingRelationships_DoubleExtendedBuilding_Should_List_AllBaseRelationships()
+        {
+            // arrange
+            var typeToAnalyze = typeof(DoubleExtendedBuilding);
+
+            // act
+            var twinModel = _modelLibrary.GetTwinModel(typeToAnalyze);
+
+            // assert
+            Assert.Equal(3, twinModel.ExtendingRelationships.Count);
+        }
+
     }
 }

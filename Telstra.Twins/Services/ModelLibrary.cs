@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Examples.Twins;
 using Telstra.Twins.Helpers;
-using Telstra.Twins.Plugins;
 
 namespace Telstra.Twins.Services
 {
@@ -65,6 +63,26 @@ namespace Telstra.Twins.Services
                                                              .FirstOrDefault();
             if (exampleProviderType != null)
                 ExampleProvider = (IExampleProvider)Activator.CreateInstance(exampleProviderType);
+
+            foreach (var (dt, twinModel) in _twinModels)
+            {
+                InitializeExtendingRelationships(dt.BaseType, twinModel);
+            }
+        }
+
+        private void InitializeExtendingRelationships(Type dt, TwinModel twinModel)
+        {
+            if (dt is null || !_twinModels.ContainsKey(dt))
+            {
+                return;
+            }
+
+            GetTwinModel(dt)
+                    .Relationships
+                    .ToList()
+                    .ForEach(r => twinModel.ExtendingRelationships.Add(r.Key, r.Value));
+
+            InitializeExtendingRelationships(dt.BaseType, twinModel);
         }
 
         public List<Type> All => _modelTypes.Values.ToList();
