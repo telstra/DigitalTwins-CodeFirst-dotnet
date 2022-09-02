@@ -23,6 +23,7 @@
         </PackageReference>
         <PackageReference Include="FluentAssertions" Version="6.7.0" />
         <PackageReference Include="FluentAssertions.Json" Version="6.1.0" />
+        <PackageReference Include="CompareNETObjects" Version="4.78.0" />
     </ItemGroup>
 
     <ItemGroup>

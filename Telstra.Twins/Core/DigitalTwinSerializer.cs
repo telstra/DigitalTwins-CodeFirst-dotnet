@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Telstra.Twins.Attributes;
-using Telstra.Twins.Common;
-using Telstra.Twins.Enums;
 using Telstra.Twins.Helpers;
-using Telstra.Twins.Models;
 using Telstra.Twins.Serialization;
 using Telstra.Twins.Services;
 
@@ -116,7 +107,7 @@ namespace Telstra.Twins.Core
             var modelConverterType = typeof(ClassToTwinModelConverter<>);
             var concreteModelConverterType = modelConverterType.MakeGenericType(twinType);
             var converter = Activator.CreateInstance(concreteModelConverterType);
-            var instance = Activator.CreateInstance(twinType);
+            var instance = Activator.CreateInstance(twinType, nonPublic: true);
             options.Converters.Add(converter as JsonConverter);
             var result = JsonSerializer.Serialize(instance, options);
             return result;
@@ -178,7 +169,7 @@ namespace Telstra.Twins.Core
         /// </summary>
         private static readonly JsonSerializerOptions TwinSerializationSettings = GetTwinSerializationSettings();
 
-        private static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
+        public static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
