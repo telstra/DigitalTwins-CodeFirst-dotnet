@@ -99,7 +99,7 @@ namespace Telstra.Twins.Serialization
                 .ToDictionary(
                     prop => prop.GetModelPropertyName(),
                     prop => prop);
-            var twinInstance = Activator.CreateInstance(typeToConvert);
+            var twinInstance = Activator.CreateInstance(typeToConvert, nonPublic: true);
 
             while (reader.Read())
             {

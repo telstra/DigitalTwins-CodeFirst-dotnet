@@ -3,13 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.DigitalTwins.Core;
 using Telstra.Twins.Attributes;
-using Telstra.Twins.Common;
-using Telstra.Twins.Enums;
 using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Serialization
@@ -133,7 +130,7 @@ namespace Telstra.Twins.Serialization
         {
             var specialTwinProperties = GetTwinOnlyProperties(SpecialTwinPropertyNames);
 
-            var twinInstance = Activator.CreateInstance(typeToConvert);
+            var twinInstance = Activator.CreateInstance(typeToConvert, nonPublic: true);
             if (twinInstance is T)
             {
                 var normalTwinProperties =

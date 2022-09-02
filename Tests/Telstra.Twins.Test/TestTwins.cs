@@ -170,6 +170,18 @@ namespace Telstra.Twins.Test
         public State? NullableState { get; set; }
     }
 
+
+    [DigitalTwin(DisplayName = "Twin with protected constructor")]
+    public class TwinWithProtectedCtor : TwinBase
+    {
+        protected TwinWithProtectedCtor() { }
+
+        public TwinWithProtectedCtor(string dummy) => Dummy = dummy;
+
+        [TwinProperty]
+        public string Dummy { get; set; }
+    }
+
     public static class DataGenerator
     {
         public static TwinWithNestedObject twinWithNestedObject = new TwinWithNestedObject()

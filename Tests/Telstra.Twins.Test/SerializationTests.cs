@@ -1,13 +1,13 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Telstra.Twins.Core;
+using Telstra.Twins.Helpers;
 using Telstra.Twins.Models;
 using Telstra.Twins.Services;
 using Xunit;
 using Xunit.Abstractions;
-using System.IO;
-using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Test
 {
@@ -36,6 +36,7 @@ namespace Telstra.Twins.Test
         [InlineData(typeof(Floor))]
         [InlineData(typeof(TwinWithNestedObject))]
         [InlineData(typeof(TwinWithEnum))]
+        [InlineData(typeof(TwinWithProtectedCtor))]
         public void ShouldSerialiseModelToDTDLCustomized(Type type)
         {
             var model = Serializer.SerializeModel(type);
