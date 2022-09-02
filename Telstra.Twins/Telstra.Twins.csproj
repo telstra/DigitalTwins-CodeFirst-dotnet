@@ -14,6 +14,8 @@
             DeviceInstancesDB NuGet versions:
             1.0.8
             - Listed the relationships from parent none-abstract classes in the TwinModel
+            - Fixed de-serialization of twin json strings back to the c# model
+            - Fixed issue creating Dtdl models for c# classes without default public constructor
             
             1.0.7
             - Renamed the packageId
