@@ -236,6 +236,16 @@ namespace Telstra.Twins.Serialization
                                 reader.TryGetGuid(out var typedValue);
                                 property.SetValue(twinInstance, typedValue);
                             }
+                            else if (propertyType == typeof(DateTimeOffset))
+                            {
+                                reader.TryGetDateTimeOffset(out var typedValue);
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(DateTime))
+                            {
+                                reader.TryGetDateTime(out var typedValue);
+                                property.SetValue(twinInstance, typedValue);
+                            }
                             else if (propertyType.IsEnum)
                             {
                                 var typedValue = reader.GetString();
