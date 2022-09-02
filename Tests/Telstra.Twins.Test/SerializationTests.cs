@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using KellermanSoftware.CompareNetObjects;
 using Telstra.Twins.Core;
 using Telstra.Twins.Helpers;
 using Telstra.Twins.Models;
@@ -35,6 +36,8 @@ namespace Telstra.Twins.Test
         [InlineData(typeof(Building))]
         [InlineData(typeof(Floor))]
         [InlineData(typeof(TwinWithNestedObject))]
+        [InlineData(typeof(SimpleTwin))]
+        [InlineData(typeof(TwinWithAllAttributes))]
         [InlineData(typeof(TwinWithEnum))]
         [InlineData(typeof(TwinWithProtectedCtor))]
         public void ShouldSerialiseModelToDTDLCustomized(Type type)
@@ -65,6 +68,15 @@ namespace Telstra.Twins.Test
             JsonAssert.Equal(twinDTDL, expectedDTDL);
         }
 
+
+        [Theory]
+        [MemberData(nameof(TwinTestData))]
+        public void ShouldDeserializeTwinToObject(string twinDTDL, object twinObject)
+        {
+            var deserializedObject = Serializer.DeserializeTwin(twinDTDL);
+            deserializedObject.ShouldCompare(twinObject);
+        }
+
         public static IEnumerable<object[]> ModelTestData()
         {
             yield return new object[] {
@@ -91,6 +103,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.TwinWithEnumModel,
                 typeof(TwinWithEnum)
             };
+            yield return new object[] {
+                DataGenerator.TwinWithReadOnlyPropertiesModel,
+                typeof(TwinWithReadOnlyProperties)
+            };
         }
 
         public static IEnumerable<object[]> TwinTestData()
@@ -114,6 +130,10 @@ namespace Telstra.Twins.Test
             yield return new object[] {
                 DataGenerator.TwinWithEnumDTDL,
                 DataGenerator.twinWithEnum
+            };
+            yield return new object[] {
+                DataGenerator.TwinWithReadOnlyPropertiesDTDL,
+                DataGenerator.twinWithReadOnlyProperties
             };
         }
     }

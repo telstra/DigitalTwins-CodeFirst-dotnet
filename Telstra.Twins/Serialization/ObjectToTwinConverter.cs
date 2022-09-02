@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.DigitalTwins.Core;
 using Telstra.Twins.Attributes;
+using Telstra.Twins.Core;
 using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins.Serialization
@@ -106,18 +107,13 @@ namespace Telstra.Twins.Serialization
                 else
                 {
                     // Create the custom converter
-                    var twinComponentConverterType = typeof(ObjectToTwinConverter<>);
+                    var twinComponentConverterType = typeof(ObjectToTwinComponentConverter<>);
                     var concreteTwinComponentConverterType =
                         twinComponentConverterType.MakeGenericType(propertyValue.GetType());
                     var componentConverter = Activator.CreateInstance(concreteTwinComponentConverterType) as JsonConverter;
 
-                    var componentSerializationOptions = new JsonSerializerOptions()
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        Converters = { componentConverter! },
-                        WriteIndented = options.WriteIndented,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    };
+                    var componentSerializationOptions = DigitalTwinSerializer.GetTwinSerializationSettings();
+                    componentSerializationOptions.Converters.Add(componentConverter!);
 
                     JsonSerializer.Serialize(writer, propertyValue, componentSerializationOptions);
                 }
@@ -153,102 +149,110 @@ namespace Telstra.Twins.Serialization
                             throw new JsonException();
                         }
 
-                        if (name != null)
+                        // Does the Json property match one of the special model only properties?
+                        if (name != null && reader.TokenType != JsonTokenType.Null && propMap.TryGetValue(name, out var property) && property.CanWrite)
                         {
-                            // Does the Json property match one of the special model only properties?
-                            if (propMap.TryGetValue(name, out var property))
+                            // What type is the property?
+                            var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+
+                            if (propertyType == typeof(string))
                             {
-                                // What type is the property?
-                                var propertyType = property.PropertyType;
+                                var typedValue = reader.GetString();
+                                if (typedValue != null)
+                                {
+                                    property.SetValue(twinInstance, typedValue);
+                                }
+                            }
+                            else if (propertyType == typeof(short))
+                            {
+                                var typedValue = reader.GetInt16();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(int))
+                            {
+                                var typedValue = reader.GetInt32();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(long))
+                            {
+                                var typedValue = reader.GetInt64();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(double))
+                            {
+                                var typedValue = reader.GetDouble();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(char))
+                            {
+                                var typedValue = reader.GetString();
+                                if (typedValue != null)
+                                {
+                                    property.SetValue(twinInstance, typedValue?.First() ?? '\0');
+                                }
+                            }
+                            else if (propertyType == typeof(float))
+                            {
+                                var typedValue = reader.GetSingle();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(decimal))
+                            {
+                                var typedValue = reader.GetDecimal();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(byte))
+                            {
+                                var typedValue = reader.GetByte();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(sbyte))
+                            {
+                                var typedValue = reader.GetSByte();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(ushort))
+                            {
+                                var typedValue = reader.GetUInt16();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(uint))
+                            {
+                                var typedValue = reader.GetUInt32();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(ulong))
+                            {
+                                var typedValue = reader.GetUInt64();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(bool))
+                            {
+                                var typedValue = reader.GetBoolean();
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType == typeof(Guid))
+                            {
+                                reader.TryGetGuid(out var typedValue);
+                                property.SetValue(twinInstance, typedValue);
+                            }
+                            else if (propertyType.IsEnum)
+                            {
+                                var typedValue = reader.GetString();
+                                property.SetValue(twinInstance, Enum.Parse(propertyType, typedValue));
+                            }
+                            else if (propertyType.IsClass)
+                            {
+                                var twinComponentConverterType = typeof(ObjectToTwinComponentConverter<>);
+                                var concreteTwinComponentConverterType =
+                                    twinComponentConverterType.MakeGenericType(propertyType);
+                                var componentConverter = Activator.CreateInstance(concreteTwinComponentConverterType) as JsonConverter;
 
-                                if (propertyType == typeof(string))
-                                {
-                                    var typedValue = reader.GetString();
-                                    if (typedValue != null)
-                                    {
-                                        property.SetValue(twinInstance, typedValue);
-                                    }
-                                }
-                                else if (propertyType == typeof(short))
-                                {
-                                    var typedValue = reader.GetInt16();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(int))
-                                {
-                                    var typedValue = reader.GetInt32();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(long))
-                                {
-                                    var typedValue = reader.GetInt64();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(double))
-                                {
-                                    var typedValue = reader.GetDouble();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(char))
-                                {
-                                    var typedValue = reader.GetString();
-                                    if (typedValue != null)
-                                    {
-                                        property.SetValue(twinInstance, typedValue?.First() ?? '\0');
-                                    }
-                                }
-                                else if (propertyType == typeof(float))
-                                {
-                                    var typedValue = reader.GetSingle();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(decimal))
-                                {
-                                    var typedValue = reader.GetDecimal();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(byte))
-                                {
-                                    var typedValue = reader.GetByte();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(sbyte))
-                                {
-                                    var typedValue = reader.GetSByte();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(ushort))
-                                {
-                                    var typedValue = reader.GetUInt16();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(uint))
-                                {
-                                    var typedValue = reader.GetUInt32();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType == typeof(ulong))
-                                {
-                                    var typedValue = reader.GetUInt64();
-                                    property.SetValue(twinInstance, typedValue);
-                                }
-                                else if (propertyType.IsClass)
-                                {
-                                    var twinComponentConverterType = typeof(ObjectToTwinComponentConverter<>);
-                                    var concreteTwinComponentConverterType =
-                                        twinComponentConverterType.MakeGenericType(propertyType);
-                                    var componentConverter = Activator.CreateInstance(concreteTwinComponentConverterType) as JsonConverter;
-
-                                    var componentSerializationOptions = new JsonSerializerOptions()
-                                    {
-                                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                                        Converters = { componentConverter! },
-                                        WriteIndented = options.WriteIndented
-                                    };
-                                    var typedValue =
-                                        JsonSerializer.Deserialize(ref reader, propertyType, componentSerializationOptions);
-                                    property.SetValue(twinInstance, typedValue);
-                                }
+                                var componentSerializationOptions = DigitalTwinSerializer.GetTwinSerializationSettings();
+                                componentSerializationOptions.Converters.Add(componentConverter!);
+                                var typedValue =
+                                    JsonSerializer.Deserialize(ref reader, propertyType, componentSerializationOptions);
+                                property.SetValue(twinInstance, typedValue);
                             }
                         }
                     }

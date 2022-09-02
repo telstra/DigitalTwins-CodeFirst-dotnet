@@ -169,7 +169,7 @@ namespace Telstra.Twins.Core
         /// </summary>
         private static readonly JsonSerializerOptions TwinSerializationSettings = GetTwinSerializationSettings();
 
-        private static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
+        public static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
