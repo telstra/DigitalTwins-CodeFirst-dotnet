@@ -146,7 +146,7 @@ namespace Telstra.Twins.Models
                 var fieldsInfo = propertyType.GetProperties();
                 foreach (var fieldInfo in fieldsInfo)
                 {
-                    fields.Add(new NestedField(fieldInfo.Name,
+                    fields.Add(new NestedField(fieldInfo.Name.ToCamelCase(),
                         SchemaFromType(fieldInfo)));
                 }
 
