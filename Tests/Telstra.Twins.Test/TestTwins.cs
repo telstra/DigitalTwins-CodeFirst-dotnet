@@ -121,8 +121,8 @@ namespace Telstra.Twins.Test
         public NestedObject()
         { }
 
-        public string name { get; set; }
-        public string value { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
         public State State { get; set; }
     }
 
@@ -200,8 +200,8 @@ namespace Telstra.Twins.Test
             ETag = "abcd",
             NestedObj = new NestedObject()
             {
-                name = "name",
-                value = "value",
+                Name = "name",
+                Value = "value",
                 State = State.Inactive
             },
             Speed = 50
@@ -256,7 +256,7 @@ namespace Telstra.Twins.Test
         public static string SimpleTwinDTDL = "{\r\n  \"$dtId\": \"122233\",\r\n  \"$etag\": \"4444\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n    \"propertyMetadata\": {}\r\n  },\r\n  \"measurement\": 2,\r\n  \"quantity\": 1\r\n}";
         public static string SimpleTwinModel = "    {\r\n  \"@id\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Simple Twin\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"quantity\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"measurement\",\r\n      \"schema\": \"integer\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithNestedObjectDTDL = "{\r\n  \"$dtId\": \"11111\",\r\n  \"$etag\": \"abcd\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n    \"propertyMetadata\": {}\r\n  },\r\n  \"speed\": 50,\r\n  \"nestedObj\": {\r\n    \"name\": \"name\",\r\n    \"value\": \"value\",\r\n    \"state\": \"Inactive\"\r\n  }\r\n}";
-        public static string TwinWithNestedObjectModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a nested object\",\r\n  \"contents\": [\r\n    {\r\n      \"schema\": {\r\n        \"@type\": \"Object\",\r\n        \"fields\": [\r\n          {\r\n            \"name\": \"name\",\r\n            \"schema\": \"string\"\r\n          },\r\n          {\r\n            \"name\": \"value\",\r\n            \"schema\": \"string\"\r\n          },\r\n          {\r\n            \"name\": \"State\",\r\n            \"schema\": {\r\n              \"@type\": \"Enum\",\r\n              \"valueSchema\": \"integer\",\r\n              \"enumValues\": [\r\n                {\r\n                  \"name\": \"Actice\",\r\n                  \"displayName\": \"Actice\",\r\n                  \"enumValue\": 1\r\n                },\r\n                {\r\n                  \"name\": \"Inactive\",\r\n                  \"displayName\": \"Inactive\",\r\n                  \"enumValue\": 2\r\n                }\r\n              ]\r\n            }\r\n          }\r\n        ]\r\n      },\r\n      \"@type\": \"Property\",\r\n      \"name\": \"nestedObj\"\r\n    },\r\n    {\r\n      \"schema\": \"integer\",\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"speed\"\r\n    }\r\n  ]\r\n}";
+        public static string TwinWithNestedObjectModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithnestedobject;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a nested object\",\r\n  \"contents\": [\r\n    {\r\n      \"schema\": {\r\n        \"@type\": \"Object\",\r\n        \"fields\": [\r\n          {\r\n            \"name\": \"name\",\r\n            \"schema\": \"string\"\r\n          },\r\n          {\r\n            \"name\": \"value\",\r\n            \"schema\": \"string\"\r\n          },\r\n          {\r\n            \"name\": \"state\",\r\n            \"schema\": {\r\n              \"@type\": \"Enum\",\r\n              \"valueSchema\": \"integer\",\r\n              \"enumValues\": [\r\n                {\r\n                  \"name\": \"Actice\",\r\n                  \"displayName\": \"Actice\",\r\n                  \"enumValue\": 1\r\n                },\r\n                {\r\n                  \"name\": \"Inactive\",\r\n                  \"displayName\": \"Inactive\",\r\n                  \"enumValue\": 2\r\n                }\r\n              ]\r\n            }\r\n          }\r\n        ]\r\n      },\r\n      \"@type\": \"Property\",\r\n      \"name\": \"nestedObj\"\r\n    },\r\n    {\r\n      \"schema\": \"integer\",\r\n      \"@type\": \"Telemetry\",\r\n      \"name\": \"speed\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithRelationshipDTDL = "    {\r\n  \"$dtId\": \"1221\",\r\n  \"$etag\": \"Etag\",\r\n  \"$metadata\": {\r\n    \"$model\": \"dtmi:telstra:twins:test:twinwithrelationship;1\",\r\n    \"propertyMetadata\": {}\r\n  },\r\n  \"count\": 10\r\n}";
         public static string TwinWithRelationshipModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithrelationship;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with a relationship\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"maxMultiplicity\": 5,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"testRelationship\"\r\n    }\r\n  ]\r\n}";
         public static string TwinWithMinMultiplicityModel = "{\r\n  \"@id\": \"dtmi:telstra:twins:test:twinwithminmultiplicity;1\",\r\n  \"@type\": \"Interface\",\r\n  \"@context\": \"dtmi:dtdl:context;2\",\r\n  \"displayName\": \"Twin with min multiplicity\",\r\n  \"contents\": [\r\n    {\r\n      \"@type\": \"Property\",\r\n      \"name\": \"count\",\r\n      \"schema\": \"integer\"\r\n    },\r\n    {\r\n      \"minMultiplicity\": 2,\r\n      \"target\": \"dtmi:telstra:twins:test:simpletwin;1\",\r\n      \"@type\": \"Relationship\",\r\n      \"name\": \"test Relationship\"\r\n    }\r\n  ]\r\n}";

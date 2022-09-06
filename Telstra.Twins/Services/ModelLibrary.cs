@@ -43,9 +43,18 @@ namespace Telstra.Twins.Services
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             var types = assemblies.SelectMany(a =>
-                                    a.GetTypes()
-                                    .Where(t => Attribute.IsDefined(t, typeof(DigitalTwinAttribute))))
-                                    .OrderBy(t => t, TypeDerivationComparer.Instance)
+                                  {
+                                      try
+                                      {
+                                          return a.GetTypes()
+                                              .Where(t => Attribute.IsDefined(t, typeof(DigitalTwinAttribute)));
+                                      }
+                                      catch (ReflectionTypeLoadException)
+                                      {
+                                          return new List<Type>();
+                                      }
+                                  })
+                                .OrderBy(t => t, TypeDerivationComparer.Instance)
                                 .ToList();
             TwinModelFactory twinModelFactory = new TwinModelFactory();
             types.ForEach(dt =>
