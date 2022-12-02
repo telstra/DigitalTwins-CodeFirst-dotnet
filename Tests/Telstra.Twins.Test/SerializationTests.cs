@@ -132,6 +132,10 @@ namespace Telstra.Twins.Test
                 DataGenerator.twinWithEnum
             };
             yield return new object[] {
+                DataGenerator.TwinWithEnumDTDL2,
+                DataGenerator.twinWithEnum
+            };
+            yield return new object[] {
                 DataGenerator.TwinWithReadOnlyPropertiesDTDL,
                 DataGenerator.twinWithReadOnlyProperties
             };

@@ -248,7 +248,9 @@ namespace Telstra.Twins.Serialization
                             }
                             else if (propertyType.IsEnum)
                             {
-                                var typedValue = reader.GetString();
+                                var typedValue = reader.TokenType == JsonTokenType.Number
+                                    ? reader.GetInt32().ToString()
+                                    : reader.GetString();
                                 property.SetValue(twinInstance, Enum.Parse(propertyType, typedValue));
                             }
                             else if (propertyType.IsClass)
