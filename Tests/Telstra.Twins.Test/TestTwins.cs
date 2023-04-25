@@ -66,6 +66,11 @@ namespace Telstra.Twins.Test
         public int Dummy { get; set; }
     }
 
+    public class ExtendedBuildingWithNoAttribute : ExtendedBuilding
+    {
+        public int Dummy { get; set; }
+    }
+
     [DigitalTwin(Version = 1, DisplayName = "Floor")]
     public class Floor : Space
     {
