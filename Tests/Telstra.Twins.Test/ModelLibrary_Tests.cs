@@ -114,5 +114,15 @@ namespace Telstra.Twins.Test
             Assert.Equal(3, twinModel.ExtendingRelationships.Count);
         }
 
+        [Fact]
+        public void All_Should_Not_Include_TypesWithoutDigitalTwinAttribute()
+        {
+            // arrange
+            // act
+            var allModels = _modelLibrary.All;
+
+            // assert
+            Assert.DoesNotContain(typeof(ExtendedBuildingWithNoAttribute), allModels);
+        }
     }
 }

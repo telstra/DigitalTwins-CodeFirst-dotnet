@@ -47,7 +47,7 @@ namespace Telstra.Twins.Services
                                       try
                                       {
                                           return a.GetTypes()
-                                              .Where(t => Attribute.IsDefined(t, typeof(DigitalTwinAttribute)));
+                                              .Where(t => Attribute.IsDefined(t, typeof(DigitalTwinAttribute), inherit: false));
                                       }
                                       catch (ReflectionTypeLoadException)
                                       {

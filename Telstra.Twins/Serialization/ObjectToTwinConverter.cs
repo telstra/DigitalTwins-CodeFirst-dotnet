@@ -251,7 +251,10 @@ namespace Telstra.Twins.Serialization
                                 var typedValue = reader.TokenType == JsonTokenType.Number
                                     ? reader.GetInt32().ToString()
                                     : reader.GetString();
-                                property.SetValue(twinInstance, Enum.Parse(propertyType, typedValue));
+                                if (typedValue is not null)
+                                {
+                                    property.SetValue(twinInstance, Enum.Parse(propertyType, typedValue));
+                                }
                             }
                             else if (propertyType.IsClass)
                             {
@@ -351,17 +354,14 @@ namespace Telstra.Twins.Serialization
                 if (target != null)
                 {
                     var val = p.GetValue(target);
-                    if (val != null)
+                    if (val != null && p.GetJsonPropertyName() != "$metadata")
                     {
-                        if (p.GetJsonPropertyName() != "$metadata")
-                        {
-                            result.Add(name, val);
+                        result.Add(name, val);
 
-                            if (Attribute.IsDefined(p, typeof(TwinComponentAttribute)) &&
-                                val is TwinBase twinBase)
-                            {
-                                twinBase.Metadata.IsComponent = true;
-                            }
+                        if (Attribute.IsDefined(p, typeof(TwinComponentAttribute)) &&
+                            val is TwinBase twinBase)
+                        {
+                            twinBase.Metadata.IsComponent = true;
                         }
                     }
                 }
