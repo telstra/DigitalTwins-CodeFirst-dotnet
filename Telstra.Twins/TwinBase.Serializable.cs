@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text.Json.Serialization;
 using Azure.DigitalTwins.Core;
-using Newtonsoft.Json;
 using Telstra.Twins.Attributes;
-using Telstra.Twins.Helpers;
 using Telstra.Twins.Common;
-using Telstra.Twins.Models;
+using Telstra.Twins.Helpers;
 
 namespace Telstra.Twins
 {
-    public abstract partial class TwinBase
+    public abstract partial class TwinBase : BasicDigitalTwin
     {
         private string _modelId;
 
@@ -93,12 +90,12 @@ namespace Telstra.Twins
                 {
                     twinBaseObjects.ToList().ForEach(r =>
                     {
-                        result.Add(new BasicRelationship { SourceId = this.TwinId, TargetId = r.TwinId, Name = relationshipType });
+                        result.Add(new BasicRelationship { SourceId = this.Id, TargetId = r.Id, Name = relationshipType });
                     });
                 }
                 else if (prop is TwinBase twinProp)
                 {
-                    result.Add(new BasicRelationship { SourceId = this.TwinId, TargetId = twinProp.TwinId, Name = relationshipType });
+                    result.Add(new BasicRelationship { SourceId = this.Id, TargetId = twinProp.Id, Name = relationshipType });
                 }
             });
             return result;
@@ -161,24 +158,6 @@ namespace Telstra.Twins
         [TwinModelOnlyProperty("displayName")]
         protected string DisplayName { get; set; }
 
-        [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
-        [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinId)]
-        public string TwinId { get; set; }
-
-        /// <summary>
-        /// A string representing a weak ETag for the entity that this request performs an operation against, as per RFC7232.
-        /// </summary>
-        [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
-        [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinETag)]
-        public string ETag { get; set; }
-
-        [TwinOnlyProperty(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
-        [JsonPropertyName(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
-        [JsonProperty(DigitalTwinsJsonPropertyNames.DigitalTwinMetadata)]
-        public virtual TwinMetadata Metadata { get; set; } = new TwinMetadata();
-
         private void ReadAttributeInfo()
         {
             var type = this.GetType();
@@ -207,7 +186,7 @@ namespace Telstra.Twins
 
             var basicTwin = new BasicDigitalTwin()
             {
-                Id = this.TwinId,
+                Id = this.Id,
                 Metadata = new DigitalTwinMetadata()
                 {
                     ModelId = ModelId,

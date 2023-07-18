@@ -46,8 +46,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.DigitalTwins.Core" Version="1.2.2" />
-        <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.12.7" />
+        <PackageReference Include="Azure.DigitalTwins.Core" Version="1.4.0" />
+        <PackageReference Include="DTDLParser" Version="1.0.52" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>

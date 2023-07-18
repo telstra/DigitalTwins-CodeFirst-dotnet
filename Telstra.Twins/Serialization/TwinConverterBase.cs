@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Azure.DigitalTwins.Core;
 using Telstra.Twins.Attributes;
 
 namespace Telstra.Twins.Serialization
@@ -20,7 +21,11 @@ namespace Telstra.Twins.Serialization
             return typesMatch && hasTwinAttribute;
         }
 
-        protected static IEnumerable<PropertyInfo> GetTwinProperties<TA>(string[] propertiesToExclude, BindingFlags bindingFlags, Func<PropertyInfo, string> getNameFunc) where TA : Attribute
+        protected static IEnumerable<PropertyInfo> GetTwinProperties<TA>(
+            string[] propertiesToExclude,
+            BindingFlags bindingFlags,
+            Func<PropertyInfo, string> getNameFunc)
+            where TA : Attribute
         {
             var typeToAnalyze = typeof(T);
             var properties = typeToAnalyze
@@ -36,7 +41,19 @@ namespace Telstra.Twins.Serialization
             var properties = typeToAnalyze
                 .GetProperties(bindingFlags)
                 .Where(prop => prop.IsDefined(typeof(TA)));
+
             return properties;
+        }
+
+        protected static IEnumerable<PropertyInfo> GetBasicDigitalTwinProperties()
+        {
+            var typeToAnalyze = typeof(T);
+
+            var basicTwinProperties = typeToAnalyze
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(prop => prop.DeclaringType == typeof(BasicDigitalTwin));
+
+            return basicTwinProperties;
         }
     }
 }

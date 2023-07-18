@@ -45,15 +45,14 @@ namespace Telstra.Twins.Test
   ""$etag"": ""5678"",
   ""$metadata"": {
     ""$model"": ""dtmi:telstra:twins:test:twinwithdatetime;1"",
-    ""propertyMetadata"": {}
   },
   ""manufactured"": ""2021-11-17T22:23:00+10:00""
 }";
 
             var twinWithDateTime = new TwinWithDateTime
             {
-                TwinId = "1234",
-                ETag = "5678",
+                Id = "1234",
+                ETag = new Azure.ETag("5678"),
                 Manufactured = new DateTimeOffset(2021, 11, 17, 22, 23, 0, TimeSpan.FromHours(10))
             };
             var model = Serializer.SerializeTwin(twinWithDateTime);
@@ -85,13 +84,15 @@ namespace Telstra.Twins.Test
         [DigitalTwin]
         public class TwinWithDateTime : TwinBase
         {
-            [TwinProperty] public DateTimeOffset Manufactured { get; set; }
+            [TwinProperty]
+            public DateTimeOffset Manufactured { get; set; }
         }
 
         [DigitalTwin]
         public class TwinWithNullableDateTime : TwinBase
         {
-            [TwinProperty] public DateTimeOffset? Manufactured { get; set; }
+            [TwinProperty]
+            public DateTimeOffset? Manufactured { get; set; }
         }
     }
 }

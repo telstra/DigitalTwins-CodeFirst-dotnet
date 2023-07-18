@@ -164,10 +164,6 @@ namespace Telstra.Twins.Core
             return result;
         }
 
-        /// <summary>
-        /// Twin serializer settings
-        /// </summary>
-        private static readonly JsonSerializerOptions TwinSerializationSettings = GetTwinSerializationSettings();
 
         public static JsonSerializerOptions GetTwinSerializationSettings() => new JsonSerializerOptions()
         {
@@ -177,14 +173,10 @@ namespace Telstra.Twins.Core
                 new JsonStringEnumConverter()
             },
             WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
         };
 
-        /// <summary>
-        /// Model serializer settings
-        /// </summary>
-        private static readonly JsonSerializerOptions ModelSerializationSettings =
-            GetModelSerializationSettings();
 
         private static JsonSerializerOptions GetModelSerializationSettings() => new JsonSerializerOptions()
         {

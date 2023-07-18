@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Azure;
 using Azure.DigitalTwins.Core;
 using Telstra.Twins.Attributes;
 using Telstra.Twins.Core;
@@ -47,6 +48,10 @@ namespace Telstra.Twins.Serialization
 
                     case bool castValue:
                         writer.WriteBoolean(propertyName, castValue);
+                        break;
+
+                    case ETag castValue:
+                        writer.WriteString(propertyName, castValue.ToString().TrimStart('"').TrimEnd('"'));
                         break;
 
                     default:
@@ -246,6 +251,11 @@ namespace Telstra.Twins.Serialization
                                 reader.TryGetDateTime(out var typedValue);
                                 property.SetValue(twinInstance, typedValue);
                             }
+                            else if (propertyType == typeof(ETag))
+                            {
+                                var etagValue = reader.GetString();
+                                property.SetValue(twinInstance, new ETag(etagValue ?? string.Empty));
+                            }
                             else if (propertyType.IsEnum)
                             {
                                 var typedValue = reader.TokenType == JsonTokenType.Number
@@ -284,15 +294,15 @@ namespace Telstra.Twins.Serialization
             return jsonSpecialTwinProperties.ToList();
         }
 
-        protected static IEnumerable<PropertyInfo> GetTwinOnlyProperties(string[] twinOnlyPropertyNames, string[] twinOnlyPropertyNamesToExclude = null!)
+        protected static IEnumerable<PropertyInfo> GetTwinOnlyProperties(string[] twinOnlyPropertyNames, string[]? twinOnlyPropertyNamesToExclude = null)
         {
             var properties =
-                GetTwinProperties<TwinOnlyPropertyAttribute>(BindingFlags.Public | BindingFlags.NonPublic |
-                                                             BindingFlags.Instance)
-                    .Where(prop => twinOnlyPropertyNames.Contains(prop.GetTwinPropertyName()));
+                GetBasicDigitalTwinProperties()
+                .Concat(GetTwinProperties<TwinOnlyPropertyAttribute>(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                .Where(prop => twinOnlyPropertyNames.Contains(prop.GetTwinPropertyName()));
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (twinOnlyPropertyNamesToExclude != null)
+            if (twinOnlyPropertyNamesToExclude is not null)
             {
                 properties = properties.Where(prop =>
                     !twinOnlyPropertyNamesToExclude.Contains(prop.GetTwinPropertyName()));
@@ -337,37 +347,5 @@ namespace Telstra.Twins.Serialization
             return matchingProperties;
         }
 
-        /// <summary>
-        /// Prepares the properties of the type T that are decorated with the provided attribute type TT
-        /// </summary>
-        /// <typeparam name="TA">The Attribute type for discovery</typeparam>
-        /// <typeparam name="TT">The ModelType on which to do the discovery</typeparam>
-        /// <param name="target"></param>
-        protected static Dictionary<string, object> PrepareDecoratedProperties<TA, TT>(TT target = default!) where TA : Attribute
-        {
-            var result = new Dictionary<string, object>();
-            var matchingPropertiesList = GetDecoratedProperties<TA, TT>().ToList();
-
-            matchingPropertiesList.ForEach(p =>
-            {
-                var name = p.GetJsonPropertyName();
-                if (target != null)
-                {
-                    var val = p.GetValue(target);
-                    if (val != null && p.GetJsonPropertyName() != "$metadata")
-                    {
-                        result.Add(name, val);
-
-                        if (Attribute.IsDefined(p, typeof(TwinComponentAttribute)) &&
-                            val is TwinBase twinBase)
-                        {
-                            twinBase.Metadata.IsComponent = true;
-                        }
-                    }
-                }
-            });
-
-            return result;
-        }
     }
 }

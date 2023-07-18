@@ -2,7 +2,7 @@
 
 namespace Telstra.Twins
 {
-    public abstract partial class TwinBase 
+    public abstract partial class TwinBase : BasicDigitalTwin
     {
     }
 }
