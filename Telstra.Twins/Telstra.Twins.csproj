@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Telstra.Twins</RootNamespace>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.0.10</Version>
+        <Version>1.1.0</Version>
         <Authors>Telstra ADT Team, P6.6 Owners</Authors>
         <Company>Telstra, PTW-Freiburg</Company>
         <Description>Telstra Digital Twins Core</Description>
@@ -12,6 +12,9 @@
         <Product>P6_6_1_Telstra.Twins</Product>
         <PackageReleaseNotes>
             DeviceInstancesDB NuGet versions:
+            1.1.0
+            - Breaking change: TwinBase now inherits from BasicDigitalTwins
+            
             1.0.10
             - Fixed the bug 28877: Do not include inherited classes that don't have a DigitalTwinsAttribute in ModelLibrary
             - Resolved some warnings.
